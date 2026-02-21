@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
@@ -33,4 +34,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/pets/{pet}', [PetController::class, 'update'])->name('pets.update');
     Route::delete('/pets/{pet}', [PetController::class, 'destroy'])->name('pets.destroy');
     Route::post('/pets/{pet}/buy', [OrderController::class, 'store'])->name('orders.store');
+});
+
+// Admin routes
+Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::post('/pets/{pet}/moderate', [AdminController::class, 'moderate'])->name('moderate');
+    Route::delete('/pets/{pet}', [AdminController::class, 'deletePet'])->name('delete-pet');
+    Route::get('/audit-log', [AdminController::class, 'auditLog'])->name('audit-log');
 });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Pet;
+use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -36,15 +37,29 @@ class PetController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Фильтр по локации
+        if ($request->filled('location')) {
+            $query->where('location', 'like', "%{$request->location}%");
+        }
+
         match ($request->get('sort')) {
             'oldest'        => $query->reorder('created_at', 'asc'),
             'incident_desc' => $query->reorder('incident_date', 'desc'),
+            'location_asc'  => $query->reorder('location', 'asc'),
+            'location_desc' => $query->reorder('location', 'desc'),
             default         => null,
         };
 
         $pets = $query->get();
 
-        return view('pets.index', compact('pets', 'categories'));
+        // Список уникальных локаций для фильтра
+        $locations = Pet::whereNotNull('location')
+            ->distinct()
+            ->pluck('location')
+            ->sort()
+            ->values();
+
+        return view('pets.index', compact('pets', 'categories', 'locations'));
     }
 
     public function create()
@@ -66,6 +81,28 @@ class PetController extends Controller
             'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        // Проверка лимитов объявлений на пользователя
+        $userListingsCount = Pet::where('user_id', auth()->id())->count();
+        $maxListings = config('pets.max_listings_per_user', 5);
+
+        if ($userListingsCount >= $maxListings) {
+            return redirect()->back()
+                ->withErrors(['listings' => "Siz maksimal {$maxListings} ta aktiv e'lon joylashtirasiz."])
+                ->withInput();
+        }
+
+        // Проверка дневного лимита
+        $dailyListings = Pet::where('user_id', auth()->id())
+            ->where('created_at', '>=', now()->subDay())
+            ->count();
+        $maxPerDay = config('pets.max_listings_per_day', 3);
+
+        if ($dailyListings >= $maxPerDay) {
+            return redirect()->back()
+                ->withErrors(['daily_limit' => "Bugun siz {$maxPerDay} ta e'lon joylashtirgansiz. Ertaga qaytib urinib ko'ring."])
+                ->withInput();
+        }
+
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('images/pets', 'public');
         }
@@ -73,7 +110,10 @@ class PetController extends Controller
         $validated['user_id'] = auth()->id();
         $validated['status']  = 'available';
 
-        Pet::create($validated);
+        $pet = Pet::create($validated);
+
+        // Логируем создание
+        ActivityLogService::logCreate($pet, $request);
 
         return redirect()->route('dashboard')->with('success', 'E\'lon muvaffaqiyatli joylashtirildi! 🎉');
     }
@@ -118,7 +158,13 @@ class PetController extends Controller
             $validated['image'] = $request->file('image')->store('images/pets', 'public');
         }
 
+        // Сохраняем старые значения перед обновлением
+        $oldData = $pet->only(['name', 'type', 'category_id', 'phone', 'location', 'status']);
+
         $pet->update($validated);
+
+        // Логируем обновление
+        ActivityLogService::logUpdate($pet, $oldData, $request);
 
         return redirect()->route('dashboard')->with('success', 'E\'lon muvaffaqiyatli yangilandi!');
     }
@@ -132,6 +178,9 @@ class PetController extends Controller
         if ($pet->image && Storage::disk('public')->exists($pet->image)) {
             Storage::disk('public')->delete($pet->image);
         }
+
+        // Логируем удаление перед удалением
+        ActivityLogService::logDelete($pet);
 
         $pet->delete();
 

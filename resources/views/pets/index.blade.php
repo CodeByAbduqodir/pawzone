@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            {{-- Фильтры: тип + статус + сортировка --}}
+            {{-- Фильтры: тип + статус + локация + сортировка --}}
             <div class="d-flex flex-wrap align-items-center gap-3 mb-4 pb-3" style="border-bottom:1px solid #e9ecef;">
                 <div class="d-flex align-items-center gap-2">
                     <label class="fw-semibold text-muted small mb-0">E'lon turi:</label>
@@ -94,11 +94,24 @@
                     </select>
                 </div>
                 <div class="d-flex align-items-center gap-2">
+                    <label class="fw-semibold text-muted small mb-0">📍 Joy:</label>
+                    <select name="location" class="form-select form-select-sm" style="width:auto;" onchange="this.form.submit()">
+                        <option value="">Barchasi</option>
+                        @foreach($locations as $loc)
+                            <option value="{{ $loc }}" {{ request('location') === $loc ? 'selected' : '' }}>
+                                {{ $loc }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="d-flex align-items-center gap-2">
                     <label class="fw-semibold text-muted small mb-0">Saralash:</label>
                     <select name="sort" class="form-select form-select-sm" style="width:auto;" onchange="this.form.submit()">
                         <option value=""              {{ !request('sort')                    ? 'selected' : '' }}>Yangi → Eski</option>
                         <option value="oldest"        {{ request('sort') === 'oldest'        ? 'selected' : '' }}>Eski → Yangi</option>
                         <option value="incident_desc" {{ request('sort') === 'incident_desc' ? 'selected' : '' }}>Sana bo'yicha</option>
+                        <option value="location_asc"  {{ request('sort') === 'location_asc'  ? 'selected' : '' }}>📍 A → Z</option>
+                        <option value="location_desc" {{ request('sort') === 'location_desc' ? 'selected' : '' }}>📍 Z → A</option>
                     </select>
                 </div>
 

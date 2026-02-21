@@ -75,6 +75,15 @@
                                 </span>
                             </li>
                             <li><hr class="dropdown-divider"></li>
+                            @if(auth()->user()->isAdmin())
+                                <li>
+                                    <a class="dropdown-item {{ request()->routeIs('admin.*') ? 'fw-bold' : '' }}"
+                                        href="{{ route('admin.dashboard') }}">
+                                        🛡️ Admin Panel
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                            @endif
                             <li>
                                 <a class="dropdown-item {{ request()->routeIs('dashboard') ? 'fw-bold' : '' }}"
                                     href="{{ route('dashboard') }}">
