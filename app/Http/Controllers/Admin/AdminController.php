@@ -115,5 +115,67 @@ class AdminController extends Controller
         return redirect()->route('admin.dashboard')
             ->with('success', "E'lon o'chirildi.");
     }
+
+    /**
+     * Аналитика и графики
+     */
+    public function analytics()
+    {
+        // Статистика по типам
+        $lostFoundStats = [
+            'lost'  => Pet::where('type', 'lost')->count(),
+            'found' => Pet::where('type', 'found')->count(),
+        ];
+
+        // Статистика по статусам
+        $statusStats = [
+            'available' => Pet::where('status', 'available')->count(),
+            'pending'   => Pet::where('status', 'pending')->count(),
+            'resolved'  => Pet::where('status', 'resolved')->count(),
+        ];
+
+        // Статистика по категориям
+        $categoryStats = Pet::with('category')
+            ->get()
+            ->groupBy('category_id')
+            ->map(fn($group) => count($group))
+            ->toArray();
+
+        $categoryNames = Pet::with('category')
+            ->get()
+            ->groupBy('category.name')
+            ->keys()
+            ->values()
+            ->toArray();
+
+        // Тренд по дням (последние 30 дней)
+        $dailyTrend = [];
+        $dailyPerDay = [];
+        for ($i = 29; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $count = Pet::whereDate('created_at', $date)->count();
+            $dailyTrend[] = $date;
+            $dailyPerDay[] = $count;
+        }
+
+        // Региональное распределение (top 10)
+        $regionStats = Pet::whereNotNull('location')
+            ->select('location')
+            ->selectRaw('COUNT(*) as count')
+            ->groupBy('location')
+            ->orderByDesc('count')
+            ->limit(10)
+            ->get();
+
+        return view('admin.analytics', compact(
+            'lostFoundStats',
+            'statusStats',
+            'categoryStats',
+            'categoryNames',
+            'dailyTrend',
+            'dailyPerDay',
+            'regionStats'
+        ));
+    }
 }
 

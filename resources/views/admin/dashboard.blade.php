@@ -49,8 +49,8 @@
             <div class="col-md-2">
                 <div class="card border-0 shadow-sm" style="background:linear-gradient(135deg,#a8edea,#fed6e3);">
                     <div class="card-body text-dark">
-                        <h6 class="card-title text-muted">Yopilgan</h6>
-                        <h2 class="fw-bold mb-0">{{ $stats['closed'] }}</h2>
+                        <h6 class="card-title text-muted">Hal Qilindi</h6>
+                        <h2 class="fw-bold mb-0">{{ $stats['resolved'] }}</h2>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                     <option value="">Holat: Barchasi</option>
                     <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>Faol</option>
                     <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Jarayonda</option>
-                    <option value="sold" {{ request('status') === 'sold' ? 'selected' : '' }}>Yopilgan</option>
+                    <option value="resolved" {{ request('status') === 'resolved' ? 'selected' : '' }}>Hal Qilindi</option>
                 </select>
                 <select name="type" class="form-select form-select-sm" style="width:120px;" onchange="this.form.submit()">
                     <option value="">Turi: Barchasi</option>
@@ -89,6 +89,9 @@
                     <option value="found" {{ request('type') === 'found' ? 'selected' : '' }}>Topildi</option>
                 </select>
                 <button type="submit" class="btn btn-sm btn-outline-secondary">Qidirish</button>
+                <a href="{{ route('admin.analytics') }}" class="btn btn-sm btn-outline-info">
+                    📊 Analitika
+                </a>
                 <a href="{{ route('admin.audit-log') }}" class="btn btn-sm btn-outline-primary ms-auto">
                     📋 Audit Log
                 </a>
@@ -136,7 +139,7 @@
                                 @elseif($pet->status === 'pending')
                                     <span class="badge bg-warning text-dark">⏳ Jarayonda</span>
                                 @else
-                                    <span class="badge bg-secondary">✔️ Yopilgan</span>
+                                    <span class="badge bg-secondary">✔️ Hal Qilindi</span>
                                 @endif
                             </td>
                             <td class="text-muted small">

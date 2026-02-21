@@ -104,8 +104,8 @@
                             <option value="pending" {{ old('status', $pet->status) === 'pending' ? 'selected' : '' }}>
                                 ⏳ Jarayonda
                             </option>
-                            <option value="sold" {{ old('status', $pet->status) === 'sold' ? 'selected' : '' }}>
-                                ✔️ Yopilgan (topildi / qaytarildi)
+                            <option value="resolved" {{ old('status', $pet->status) === 'resolved' ? 'selected' : '' }}>
+                                ✔️ Hal Qilindi (topildi / qaytarildi)
                             </option>
                         </select>
                         @error('status') <div class="invalid-feedback">{{ $message }}</div> @enderror

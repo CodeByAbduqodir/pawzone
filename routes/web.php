@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
 // Admin routes
 Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/analytics', [AdminController::class, 'analytics'])->name('analytics');
     Route::post('/pets/{pet}/moderate', [AdminController::class, 'moderate'])->name('moderate');
     Route::delete('/pets/{pet}', [AdminController::class, 'deletePet'])->name('delete-pet');
     Route::get('/audit-log', [AdminController::class, 'auditLog'])->name('audit-log');

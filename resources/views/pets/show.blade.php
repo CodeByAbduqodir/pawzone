@@ -45,8 +45,8 @@
                     🎉 Hayvon topildi
                 </span>
             @endif
-            @if($pet->status === 'sold')
-                <span class="badge bg-secondary fs-6 px-3 py-2 ms-2">✔️ Yopilgan</span>
+            @if($pet->status === 'resolved')
+                <span class="badge bg-secondary fs-6 px-3 py-2 ms-2">✔️ Hal Qilindi</span>
             @endif
         </div>
 
@@ -113,7 +113,7 @@
                 </div>
 
                 {{-- Блок контакта --}}
-                @if($pet->status !== 'sold')
+                @if($pet->status !== 'resolved')
                     <div class="p-4 mb-4" style="background:linear-gradient(135deg,#667eea11,#764ba211); border-radius:12px; border:1px solid #667eea33;">
                         <h5 class="fw-bold mb-3">📞 Muallif bilan bog'lanish</h5>
                         <a href="tel:{{ $pet->phone }}"

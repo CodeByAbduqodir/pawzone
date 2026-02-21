@@ -90,7 +90,7 @@
                         <option value="">Barchasi</option>
                         <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>✅ Faol</option>
                         <option value="pending"   {{ request('status') === 'pending'   ? 'selected' : '' }}>⏳ Jarayonda</option>
-                        <option value="sold"      {{ request('status') === 'sold'      ? 'selected' : '' }}>✔️ Yopilgan</option>
+                        <option value="resolved"  {{ request('status') === 'resolved'  ? 'selected' : '' }}>✔️ Hal Qilindi</option>
                     </select>
                 </div>
                 <div class="d-flex align-items-center gap-2">
@@ -148,8 +148,8 @@
                                 @endif
                                 {{-- Статус бейдж --}}
                                 <span class="position-absolute top-0 end-0 m-2 badge
-                                    {{ $pet->status === 'available' ? 'bg-success' : ($pet->status === 'pending' ? 'bg-warning text-dark' : 'bg-danger') }}">
-                                    {{ $pet->status === 'available' ? '✅ Mavjud' : ($pet->status === 'pending' ? '⏳ Band' : '❌ Sotilgan') }}
+                                    {{ $pet->status === 'available' ? 'bg-success' : ($pet->status === 'pending' ? 'bg-warning text-dark' : 'bg-secondary') }}">
+                                    {{ $pet->status === 'available' ? '✅ Mavjud' : ($pet->status === 'pending' ? '⏳ Band' : '✔️ Hal Qilindi') }}
                                 </span>
                             </div>
                             <div class="card-body d-flex flex-column">
