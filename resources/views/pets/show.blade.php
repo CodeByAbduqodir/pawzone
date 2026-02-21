@@ -1,236 +1,207 @@
 @extends('layouts.app')
 
-@section('title', $pet->name . ' - PawZone')
+@section('title', $pet->name . ' — PawZone')
 
 @section('content')
-    <div class="container my-5">
-        <div class="glass-container">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb" class="mb-4">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('pets.index') }}" class="text-decoration-none">Bosh
-                            sahifa</a>
-                    </li>
-                    <li class="breadcrumb-item"><a href="{{ route('pets.index') }}?category={{ $pet->category->slug }}"
-                            class="text-decoration-none">{{ $pet->category->name }}</a></li>
-                    <li class="breadcrumb-item active">{{ $pet->name }}</li>
-                </ol>
-            </nav>
+<div class="container my-5">
+    <div class="glass-container">
 
-            <!-- Success/Error Messages -->
-            @if(session('success'))
-                <x-alert type="success" :msg="session('success')" />
+        {{-- Breadcrumb --}}
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('pets.index') }}" class="text-decoration-none">Bosh sahifa</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('pets.index', ['category' => $pet->category->slug]) }}" class="text-decoration-none">
+                        {{ $pet->category->name }}
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">{{ $pet->name }}</li>
+            </ol>
+        </nav>
+
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        {{-- Тип объявления --}}
+        <div class="mb-3">
+            @if($pet->type === 'lost')
+                <span class="badge fs-6 px-3 py-2" style="background:linear-gradient(135deg,#f093fb,#f5576c); color:white;">
+                    😢 Hayvon yo'qoldi
+                </span>
+            @else
+                <span class="badge fs-6 px-3 py-2" style="background:linear-gradient(135deg,#43e97b,#38f9d7); color:white;">
+                    🎉 Hayvon topildi
+                </span>
             @endif
-
-            @if(session('error'))
-                <x-alert type="danger" :msg="session('error')" />
+            @if($pet->status === 'sold')
+                <span class="badge bg-secondary fs-6 px-3 py-2 ms-2">✔️ Yopilgan</span>
             @endif
+        </div>
 
-            <div class="row g-5">
-                <!-- Pet Image -->
-                <div class="col-lg-6">
-                    <div class="card border-0 shadow-lg">
-                        @if($pet->image)
-                            <img src="{{ asset('storage/' . $pet->image) }}" alt="{{ $pet->name }}" class="img-fluid rounded">
-                        @else
-                            <div class="d-flex align-items-center justify-content-center rounded"
-                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 500px;">
-                                <span class="display-1 text-white">🐾</span>
+        <div class="row g-5">
+            {{-- Фото --}}
+            <div class="col-lg-5">
+                @if($pet->image)
+                    <img src="{{ asset('storage/' . $pet->image) }}"
+                        alt="{{ $pet->name }}"
+                        class="img-fluid w-100"
+                        style="border-radius:12px; object-fit:cover; max-height:420px;">
+                @else
+                    <div class="d-flex align-items-center justify-content-center"
+                        style="background:linear-gradient(135deg,#667eea,#764ba2); height:360px; border-radius:12px;">
+                        <span style="font-size:6rem;">🐾</span>
+                    </div>
+                @endif
+            </div>
+
+            {{-- Детали --}}
+            <div class="col-lg-7">
+                <h1 class="display-5 fw-bold mb-2">{{ $pet->name }}</h1>
+
+                <div class="mb-3">
+                    <span class="badge bg-info bg-opacity-75 me-2">
+                        @if($pet->category->slug === 'mushuklar') 🐱
+                        @elseif($pet->category->slug === 'itlar') 🐶
+                        @elseif($pet->category->slug === 'qushlar') 🐦
+                        @elseif($pet->category->slug === 'baliqlar') 🐟
+                        @else 🐾
+                        @endif
+                        {{ $pet->category->name }}
+                    </span>
+                </div>
+
+                @if($pet->description)
+                    <p class="text-muted fs-5 lh-lg mb-4">{{ $pet->description }}</p>
+                @endif
+
+                {{-- Информационный блок --}}
+                <div class="p-3 mb-4" style="background:#f8f9fa; border-radius:10px; border-left:4px solid #667eea;">
+                    <div class="row g-2">
+                        @if($pet->location)
+                            <div class="col-sm-6">
+                                <div class="text-muted small">📍 Joy</div>
+                                <div class="fw-semibold">{{ $pet->location }}</div>
                             </div>
                         @endif
+                        @if($pet->incident_date)
+                            <div class="col-sm-6">
+                                <div class="text-muted small">📅 Sana</div>
+                                <div class="fw-semibold">{{ $pet->incident_date->format('d.m.Y') }}</div>
+                            </div>
+                        @endif
+                        <div class="col-sm-6">
+                            <div class="text-muted small">📂 Kategoriya</div>
+                            <div class="fw-semibold">{{ $pet->category->name }}</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-muted small">🗓 E'lon sanasi</div>
+                            <div class="fw-semibold">{{ $pet->created_at->format('d.m.Y') }}</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Pet Details -->
-                <div class="col-lg-6">
-                    <!-- Title & Category -->
-                    <div class="mb-4">
-                        <h1 class="display-4 fw-bold mb-3">{{ $pet->name }}</h1>
-                        <span class="badge bg-info fs-5 px-4 py-2">
-                            @if($pet->category->slug === 'mushuklar') 🐱
-                            @elseif($pet->category->slug === 'itlar') 🐶
-                            @elseif($pet->category->slug === 'qushlar') 🐦
-                            @elseif($pet->category->slug === 'baliqlar') 🐟
-                            @endif
-                            {{ $pet->category->name }}
-                        </span>
-                    </div>
-
-
-                    <!-- Price -->
-                    <div class="mb-4">
-                        <h2 class="price mb-0" style="font-size: 2.5rem;">
-                            {{ number_format($pet->price, 0, ',', ' ') }} so'm
-                        </h2>
-                    </div>
-
-                    <!-- Description -->
-                    @if($pet->description)
-                        <div class="mb-4">
-                            <h4 class="fw-bold mb-3">📝 Tavsif:</h4>
-                            <p class="text-muted fs-5 lh-lg">{{ $pet->description }}</p>
-                        </div>
-                    @endif
-
-                    <!-- Additional Info Card -->
-                    <div class="card mb-4"
-                        style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border: none;">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold mb-3">ℹ️ Qo'shimcha ma'lumotlar:</h5>
-                            <ul class="list-unstyled mb-0">
-                                <li class="mb-2">
-                                    <strong>📂 Kategoriya:</strong>
-                                    <span class="badge bg-info ms-2">{{ $pet->category->name }}</span>
-                                </li>
-                                <li class="mb-2">
-                                    <strong>📊 Holat:</strong>
-                                    <span class="ms-2">
-                                        @if($pet->status === 'available') ✅ Mavjud
-                                        @elseif($pet->status === 'pending') ⏳ Band qilingan
-                                        @else ❌ Sotilgan
-                                        @endif
-                                    </span>
-                                </li>
-                                <li class="mb-2">
-                                    <strong>📅 Qo'shilgan sana:</strong>
-                                    <span class="ms-2">{{ $pet->created_at->format('d.m.Y') }}</span>
-                                </li>
-                                <li>
-                                    <strong>🔖 ID:</strong>
-                                    <span class="ms-2">#{{ $pet->id }}</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="d-grid gap-3">
-                        @if($pet->status === 'available')
-                            <button type="button" class="btn btn-gradient-success btn-lg" data-bs-toggle="modal"
-                                data-bs-target="#buyModal">
-                                🛒 Sotib olish
-                            </button>
-                            <a href="#" class="btn btn-gradient btn-lg">
-                                📞 Aloqa qilish
-                            </a>
-                        @else
-                            <button class="btn btn-secondary btn-lg" disabled>
-                                @if($pet->status === 'pending')
-                                    ⏳ Bu hayvon band qilingan
-                                @else
-                                    ❌ Bu hayvon sotilgan
-                                @endif
-                            </button>
-                        @endif
-
-                        <a href="{{ route('pets.index') }}" class="btn btn-outline-secondary btn-lg">
-                            ← Orqaga qaytish
+                {{-- Блок контакта --}}
+                @if($pet->status !== 'sold')
+                    <div class="p-4 mb-4" style="background:linear-gradient(135deg,#667eea11,#764ba211); border-radius:12px; border:1px solid #667eea33;">
+                        <h5 class="fw-bold mb-3">📞 Muallif bilan bog'lanish</h5>
+                        <a href="tel:{{ $pet->phone }}"
+                            class="btn btn-gradient btn-lg fw-semibold w-100 mb-2">
+                            📞 {{ $pet->phone }}
+                        </a>
+                        <a href="https://t.me/{{ ltrim($pet->phone, '+') }}"
+                            class="btn btn-outline-secondary w-100" target="_blank">
+                            ✈️ Telegram orqali yozish
                         </a>
                     </div>
+                @else
+                    <div class="alert alert-secondary">
+                        ✔️ Bu e'lon yopilgan — hayvon topildi yoki qaytarildi.
+                    </div>
+                @endif
+
+                {{-- Кнопки владельца/admin --}}
+                @auth
+                    @if(auth()->user()->isAdmin() || $pet->user_id === auth()->id())
+                        <div class="d-flex gap-2 mt-3">
+                            <a href="{{ route('pets.edit', $pet) }}" class="btn btn-outline-primary">
+                                ✏️ Tahrirlash
+                            </a>
+                        </div>
+                    @endif
+                @endauth
+
+                <div class="mt-3">
+                    <a href="{{ route('pets.index') }}" class="btn btn-outline-secondary">
+                        ← Orqaga
+                    </a>
                 </div>
             </div>
-
-            <!-- Similar Pets Section -->
-            @php
-                $similarPets = \App\Models\Pet::where('category_id', $pet->category_id)
-                    ->where('id', '!=', $pet->id)
-                    ->where('status', 'available')
-                    ->limit(4)
-                    ->get();
-            @endphp
-
-            @if($similarPets->count() > 0)
-                <hr class="my-5">
-
-                <div class="mb-5">
-                    <h2 class="display-6 fw-bold mb-4 text-center">O'xshash Hayvonlar</h2>
-                    <p class="text-center text-muted mb-5">Sizga yoqishi mumkin bo'lgan boshqa hayvonlar</p>
-
-                    <div class="row g-4">
-                        @foreach($similarPets as $similarPet)
-                            <div class="col-lg-3 col-md-6">
-                                <div class="card h-100">
-                                    <div class="position-relative overflow-hidden">
-                                        @if($similarPet->image)
-                                            <img src="{{ asset('storage/' . $similarPet->image) }}" class="card-img-top"
-                                                alt="{{ $similarPet->name }}">
-                                        @else
-                                            <div class="card-img-top d-flex align-items-center justify-content-center"
-                                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 200px;">
-                                                <span class="display-4 text-white">🐾</span>
-                                            </div>
-                                        @endif
-                                        <span class="badge badge-modern badge-available position-absolute top-0 end-0 m-3">
-                                            ✅ Mavjud
-                                        </span>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="card-title fw-bold">{{ $similarPet->name }}</h5>
-                                        <p class="price small mb-3">
-                                            {{ number_format($similarPet->price, 0, ',', ' ') }} so'm
-                                        </p>
-                                        <a href="{{ route('pets.show', $similarPet->id) }}" class="btn btn-gradient w-100">
-                                            Ko'rish →
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
         </div>
-    </div>
 
-    <!-- Buy Modal -->
-    <div class="modal fade" id="buyModal" tabindex="-1" aria-labelledby="buyModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border: none; border-radius: 20px; overflow: hidden;">
-                <div class="modal-header"
-                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
-                    <h5 class="modal-title text-white fw-bold" id="buyModalLabel">
-                        🛒 {{ $pet->name }} ni sotib olish
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
+        {{-- Похожие объявления --}}
+        @php
+            $similar = \App\Models\Pet::where('category_id', $pet->category_id)
+                ->where('id', '!=', $pet->id)
+                ->where('status', 'available')
+                ->limit(4)->get();
+        @endphp
 
-                <form action="{{ route('orders.store', $pet) }}" method="POST">
-                    @csrf
-
-                    <div class="modal-body p-4">
-                        <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
-                            <div>
-                                <strong>💰 Narx:</strong> {{ number_format($pet->price, 0, ',', ' ') }} so'm
+        @if($similar->count() > 0)
+            <hr class="my-5">
+            <h4 class="fw-bold mb-4">O'xshash e'lonlar</h4>
+            <div class="row g-3">
+                @foreach($similar as $s)
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            @if($s->image)
+                                <img src="{{ asset('storage/' . $s->image) }}"
+                                    class="card-img-top" alt="{{ $s->name }}"
+                                    style="height:160px; object-fit:cover;">
+                            @else
+                                <div class="card-img-top d-flex align-items-center justify-content-center"
+                                    style="height:160px; background:linear-gradient(135deg,#667eea,#764ba2);">
+                                    <span class="fs-1">🐾</span>
+                                </div>
+                            @endif
+                            <div class="card-body">
+                                <div class="mb-1">
+                                    @if($s->type === 'lost')
+                                        <span class="badge" style="background:#f5576c; font-size:0.7rem;">😢 Yo'qoldi</span>
+                                    @else
+                                        <span class="badge" style="background:#43e97b; font-size:0.7rem;">🎉 Topildi</span>
+                                    @endif
+                                </div>
+                                <h6 class="fw-bold mb-1">{{ $s->name }}</h6>
+                                @if($s->location)
+                                    <div class="text-muted small mb-2">📍 {{ $s->location }}</div>
+                                @endif
+                                <a href="{{ route('pets.show', $s) }}" class="btn btn-gradient btn-sm w-100">
+                                    Ko'rish →
+                                </a>
                             </div>
                         </div>
-
-                        <p class="text-muted mb-4">
-                            Ma'lumotlaringizni qoldiring, biz tez orada siz bilan bog'lanamiz va buyurtmani tasdiqlаymiz.
-                        </p>
-
-                        <!-- Customer Name -->
-                        <x-form-input name="customer_name" label="Ismingiz *" type="text" placeholder="Masalan: Alisher" />
-
-                        <!-- Customer Phone -->
-                        <x-form-input name="customer_phone" label="Telefon raqamingiz *" type="tel"
-                            placeholder="+998 90 123 45 67" />
-
-                        <small class="text-muted">
-                            <i class="bi bi-shield-check"></i> Ma'lumotlaringiz maxfiy saqlanadi.
-                        </small>
                     </div>
-
-                    <div class="modal-footer border-0 p-4 pt-0">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Bekor qilish
-                        </button>
-                        <button type="submit" class="btn btn-gradient-success px-5">
-                            ✅ Buyurtma berish
-                        </button>
-                    </div>
-                </form>
+                @endforeach
             </div>
-        </div>
+        @endif
+
     </div>
+</div>
+
+<style>
+    .card { transition: none !important; }
+    .card:hover { transform: none !important; box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15) !important; }
+</style>
 @endsection

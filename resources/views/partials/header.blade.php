@@ -48,15 +48,13 @@
 
             <ul class="navbar-nav ms-auto align-items-center">
                 @auth
-                    {{-- Admin: кнопка добавить питомца --}}
-                    @if(auth()->user()->isAdmin())
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-gradient-success text-white px-3 me-2 {{ request()->routeIs('pets.create') ? 'active' : '' }}"
-                                href="{{ route('pets.create') }}">
-                                ➕ Hayvon qo'shish
-                            </a>
-                        </li>
-                    @endif
+                    {{-- Кнопка добавить объявление — для всех авторизованных --}}
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-gradient-success text-white px-3 me-2 {{ request()->routeIs('pets.create') ? 'active' : '' }}"
+                            href="{{ route('pets.create') }}">
+                            ➕ E'lon joylash
+                        </a>
+                    </li>
 
                     {{-- User dropdown --}}
                     <li class="nav-item dropdown">

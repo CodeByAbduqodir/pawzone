@@ -18,23 +18,33 @@ class Pet extends Model
     protected $fillable = [
         'user_id',
         'category_id',
+        'type',
         'name',
         'price',
         'description',
+        'phone',
+        'location',
+        'incident_date',
         'image',
         'status',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
-            'price' => 'decimal:2',
+            'price'         => 'decimal:2',
+            'incident_date' => 'date',
         ];
+    }
+
+    public function isLost(): bool
+    {
+        return $this->type === 'lost';
+    }
+
+    public function isFound(): bool
+    {
+        return $this->type === 'found';
     }
 
     /**
