@@ -23,6 +23,7 @@ class Pet extends Model
         'price',
         'description',
         'phone',
+        'telegram',
         'location',
         'incident_date',
         'image',

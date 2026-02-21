@@ -76,13 +76,16 @@ class PetController extends Controller
             'name'          => 'required|string|max:255',
             'description'   => 'nullable|string',
             'phone'         => 'required|string|max:20',
+            'telegram'      => 'nullable|string|max:100',
             'location'      => 'nullable|string|max:255',
             'incident_date' => 'nullable|date',
             'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Проверка лимитов объявлений на пользователя
-        $userListingsCount = Pet::where('user_id', auth()->id())->count();
+        // Проверка лимитов — только активные объявления (available + pending)
+        $userListingsCount = Pet::where('user_id', auth()->id())
+            ->whereIn('status', ['available', 'pending'])
+            ->count();
         $maxListings = config('pets.max_listings_per_user', 5);
 
         if ($userListingsCount >= $maxListings) {
@@ -145,6 +148,7 @@ class PetController extends Controller
             'name'          => 'required|string|max:255',
             'description'   => 'nullable|string',
             'phone'         => 'required|string|max:20',
+            'telegram'      => 'nullable|string|max:100',
             'location'      => 'nullable|string|max:255',
             'incident_date' => 'nullable|date',
             'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

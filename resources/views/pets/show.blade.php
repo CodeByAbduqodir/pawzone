@@ -120,10 +120,12 @@
                             class="btn btn-gradient btn-lg fw-semibold w-100 mb-2">
                             📞 {{ $pet->phone }}
                         </a>
-                        <a href="https://t.me/{{ ltrim($pet->phone, '+') }}"
+                        @if($pet->telegram)
+                        <a href="https://t.me/{{ ltrim($pet->telegram, '@') }}"
                             class="btn btn-outline-secondary w-100" target="_blank">
-                            ✈️ Telegram orqali yozish
+                            ✈️ Telegram: @{{ ltrim($pet->telegram, '@') }}
                         </a>
+                        @endif
                     </div>
                 @else
                     <div class="alert alert-secondary">

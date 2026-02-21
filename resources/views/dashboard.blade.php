@@ -35,11 +35,9 @@
                 @endif
             </span>
         </div>
-        @if(auth()->user()->isAdmin())
-            <a href="{{ route('pets.create') }}" class="btn btn-gradient px-4 py-2 fw-semibold">
-                ➕ Yangi hayvon qo'shish
-            </a>
-        @endif
+        <a href="{{ route('pets.create') }}" class="btn btn-gradient px-4 py-2 fw-semibold">
+            ➕ Yangi e'lon joylash
+        </a>
     </div>
 
     {{-- Статистика --}}
@@ -76,9 +74,7 @@
             <h4 class="fw-bold mb-0">
                 🐾 {{ auth()->user()->isAdmin() ? 'Barcha hayvonlar' : 'Mening hayvonlarim' }}
             </h4>
-            @if(auth()->user()->isAdmin())
-                <a href="{{ route('pets.create') }}" class="btn btn-sm btn-gradient px-3">➕ Qo'shish</a>
-            @endif
+            <a href="{{ route('pets.create') }}" class="btn btn-sm btn-gradient px-3">➕ Qo'shish</a>
         </div>
 
         @if($pets->count() > 0)
@@ -165,10 +161,8 @@
         @else
             <div class="text-center py-5 text-muted">
                 <div class="fs-1 mb-3">🐾</div>
-                <p>Hozircha hayvonlar yo'q.</p>
-                @if(auth()->user()->isAdmin())
-                    <a href="{{ route('pets.create') }}" class="btn btn-gradient px-4">➕ Birinchi hayvonni qo'shish</a>
-                @endif
+                <p>Hozircha e'lonlar yo'q.</p>
+                <a href="{{ route('pets.create') }}" class="btn btn-gradient px-4">➕ Birinchi e'lonni joylash</a>
             </div>
         @endif
     </div>

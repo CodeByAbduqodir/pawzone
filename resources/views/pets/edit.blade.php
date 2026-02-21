@@ -78,6 +78,19 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label fw-semibold">✈️ Telegram username (ixtiyoriy)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">@</span>
+                            <input type="text" name="telegram"
+                                class="form-control @error('telegram') is-invalid @enderror"
+                                value="{{ old('telegram', $pet->telegram) }}"
+                                placeholder="username">
+                        </div>
+                        <div class="form-text">Masalan: username (@ belgisisiz kiriting)</div>
+                        @error('telegram') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label fw-semibold">📍 Joy</label>
                         <input type="text" name="location"
                             class="form-control @error('location') is-invalid @enderror"
