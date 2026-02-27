@@ -20,7 +20,7 @@ class AdminController extends Controller
             'total'     => Pet::count(),
             'active'    => Pet::where('status', 'available')->count(),
             'pending'   => Pet::where('status', 'pending')->count(),
-            'closed'    => Pet::where('status', 'sold')->count(),
+            'resolved'  => Pet::where('status', 'resolved')->count(),
             'lost'      => Pet::where('type', 'lost')->count(),
             'found'     => Pet::where('type', 'found')->count(),
         ];

@@ -152,7 +152,7 @@ class PetController extends Controller
             'location'      => 'nullable|string|max:255',
             'incident_date' => 'nullable|date',
             'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status'        => 'required|in:available,pending,sold',
+            'status'        => 'required|in:available,pending,resolved',
         ]);
 
         if ($request->hasFile('image')) {

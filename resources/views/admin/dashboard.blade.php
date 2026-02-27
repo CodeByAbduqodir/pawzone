@@ -100,7 +100,7 @@
 
         {{-- Pets Table --}}
         <div class="table-responsive">
-            <table class="table table-hover border-0">
+            <table class="table table-hover border-0 align-middle">
                 <thead class="table-light">
                     <tr>
                         <th>E'lon</th>
@@ -109,7 +109,7 @@
                         <th>Telefon</th>
                         <th>Holat</th>
                         <th>Sana</th>
-                        <th>Xarakat</th>
+                        <th style="min-width:200px;">Amallar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -146,21 +146,45 @@
                                 {{ $pet->created_at->format('d.m.Y H:i') }}
                             </td>
                             <td>
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <a href="{{ route('pets.show', $pet) }}" class="btn btn-outline-primary" title="Ko'rish">
-                                        👁️
-                                    </a>
-                                    <a href="{{ route('pets.edit', $pet) }}" class="btn btn-outline-secondary" title="Tahrirlash">
-                                        ✏️
-                                    </a>
+                                <div class="d-flex flex-wrap gap-1">
+
+                                    {{-- Просмотр и редактирование --}}
+                                    <a href="{{ route('pets.show', $pet) }}"
+                                        class="btn btn-sm btn-outline-primary" title="Ko'rish">👁️</a>
+                                    <a href="{{ route('pets.edit', $pet) }}"
+                                        class="btn btn-sm btn-outline-secondary" title="Tahrirlash">✏️</a>
+
+                                    {{-- Модерация: кнопки зависят от текущего статуса --}}
+                                    @if($pet->status !== 'available')
+                                        <form action="{{ route('admin.moderate', $pet) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <input type="hidden" name="action" value="approve">
+                                            <button type="submit" class="btn btn-sm btn-success" title="Faollashtirish">
+                                                ✅ Faollashtirish
+                                            </button>
+                                        </form>
+                                    @endif
+
+                                    @if($pet->status === 'available')
+                                        <form action="{{ route('admin.moderate', $pet) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <input type="hidden" name="action" value="reject">
+                                            <button type="submit" class="btn btn-sm btn-warning text-dark" title="Vaqtincha yopish">
+                                                🚫 Yopish
+                                            </button>
+                                        </form>
+                                    @endif
+
+                                    {{-- Удаление --}}
                                     <form action="{{ route('admin.delete-pet', $pet) }}" method="POST" class="d-inline"
-                                        onsubmit="return confirm('O'chirmoqchimisiz?')">
+                                        onsubmit="return confirm('E\'lonni o\'chirishni tasdiqlaysizmi?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-outline-danger btn-sm" title="O'chirish">
-                                            🗑️
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="O'chirish">
+                                            🗑️ O'chirish
                                         </button>
                                     </form>
+
                                 </div>
                             </td>
                         </tr>

@@ -149,7 +149,7 @@
                                 {{-- Статус бейдж --}}
                                 <span class="position-absolute top-0 end-0 m-2 badge
                                     {{ $pet->status === 'available' ? 'bg-success' : ($pet->status === 'pending' ? 'bg-warning text-dark' : 'bg-secondary') }}">
-                                    {{ $pet->status === 'available' ? '✅ Mavjud' : ($pet->status === 'pending' ? '⏳ Band' : '✔️ Hal Qilindi') }}
+                                    {{ $pet->status === 'available' ? '✅ Faol' : ($pet->status === 'pending' ? '⏳ Jarayonda' : '✔️ Hal Qilindi') }}
                                 </span>
                             </div>
                             <div class="card-body d-flex flex-column">

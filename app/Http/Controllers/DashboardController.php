@@ -20,7 +20,7 @@ class DashboardController extends Controller
                 'total_pets'      => Pet::count(),
                 'available'       => Pet::where('status', 'available')->count(),
                 'pending'         => Pet::where('status', 'pending')->count(),
-                'sold'            => Pet::where('status', 'sold')->count(),
+                'resolved'        => Pet::where('status', 'resolved')->count(),
                 'total_orders'    => Order::count(),
             ];
         } else {
@@ -32,7 +32,7 @@ class DashboardController extends Controller
                 'total_pets'   => $pets->count(),
                 'available'    => $pets->where('status', 'available')->count(),
                 'pending'      => $pets->where('status', 'pending')->count(),
-                'sold'         => $pets->where('status', 'sold')->count(),
+                'resolved'     => $pets->where('status', 'resolved')->count(),
                 'total_orders' => $orders->count(),
             ];
         }

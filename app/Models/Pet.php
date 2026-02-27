@@ -20,7 +20,6 @@ class Pet extends Model
         'category_id',
         'type',
         'name',
-        'price',
         'description',
         'phone',
         'telegram',
@@ -33,7 +32,6 @@ class Pet extends Model
     protected function casts(): array
     {
         return [
-            'price'         => 'decimal:2',
             'incident_date' => 'date',
         ];
     }

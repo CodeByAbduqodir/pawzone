@@ -86,7 +86,6 @@
                             <th>Rasm</th>
                             <th>Nomi</th>
                             <th>Kategoriya</th>
-                            <th>Narx</th>
                             <th>Holat</th>
                             @if(auth()->user()->isAdmin())
                                 <th>Egasi</th>
@@ -125,16 +124,13 @@
                                         {{ $pet->category->name }}
                                     </span>
                                 </td>
-                                <td class="fw-semibold" style="color:#667eea;">
-                                    {{ number_format($pet->price, 0, ',', ' ') }} so'm
-                                </td>
                                 <td>
                                     @if($pet->status === 'available')
-                                        <span class="badge bg-success">✅ Mavjud</span>
+                                        <span class="badge bg-success">✅ Faol</span>
                                     @elseif($pet->status === 'pending')
-                                        <span class="badge bg-warning text-dark">⏳ Band</span>
+                                        <span class="badge bg-warning text-dark">⏳ Jarayonda</span>
                                     @else
-                                        <span class="badge bg-danger">❌ Sotilgan</span>
+                                        <span class="badge bg-secondary">✔️ Hal Qilindi</span>
                                     @endif
                                 </td>
                                 @if(auth()->user()->isAdmin())
