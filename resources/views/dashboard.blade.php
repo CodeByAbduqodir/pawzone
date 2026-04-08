@@ -3,88 +3,70 @@
 @section('title', 'Dashboard — PawZone')
 
 @section('content')
-<div class="container my-5">
+<div class="container-xl">
+    <div class="hero-surface mb-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div>
+                <span class="hero-kicker">Dashboard</span>
+                <h1 class="hero-title">Xush kelibsiz, {{ auth()->user()->name }}!</h1>
+                <p class="hero-subtitle mb-0">
+                    E'lonlar, buyurtmalar va holatlarni bir ekranda kuzating.
+                </p>
+            </div>
 
-    {{-- Alerts --}}
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <a href="{{ route('pets.create') }}" class="btn btn-gradient-success px-4 py-2">
+                + Yangi e'lon
+            </a>
         </div>
+    </div>
+
+    @if(session('success'))
+        <x-alert type="success" :msg="session('success')" />
     @endif
     @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
+        <x-alert type="danger" :msg="session('error')" />
     @endif
 
-    {{-- Header --}}
-    <div class="glass-container mb-4 py-4 px-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
-        <div>
-            <h2 class="mb-1 fw-bold">
-                👋 Xush kelibsiz, {{ auth()->user()->name }}!
-            </h2>
-            <span class="text-muted">
-                @if(auth()->user()->isAdmin())
-                    🛡 Admin panel
-                @elseif(auth()->user()->isOwner())
-                    🏠 Hayvon egasi
-                @else
-                    🔍 Topuvchi
-                @endif
-            </span>
-        </div>
-        <a href="{{ route('pets.create') }}" class="btn btn-gradient px-4 py-2 fw-semibold">
-            ➕ Yangi e'lon joylash
-        </a>
-    </div>
-
-    {{-- Статистика --}}
     <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3">
-            <div class="glass-container py-3 px-4 text-center mb-0">
-                <div class="fs-1 fw-bold" style="color:#667eea;">{{ $stats['total_pets'] }}</div>
-                <div class="text-muted small">Jami hayvonlar</div>
+        <div class="col-6 col-lg-3">
+            <div class="section-card stat-card h-100">
+                <div class="stat-value" style="color: var(--primary);">{{ $stats['total_pets'] }}</div>
+                <div class="stat-label">Jami e'lonlar</div>
             </div>
         </div>
-        <div class="col-6 col-md-3">
-            <div class="glass-container py-3 px-4 text-center mb-0">
-                <div class="fs-1 fw-bold text-success">{{ $stats['available'] }}</div>
-                <div class="text-muted small">Mavjud</div>
+        <div class="col-6 col-lg-3">
+            <div class="section-card stat-card h-100">
+                <div class="stat-value text-success">{{ $stats['available'] }}</div>
+                <div class="stat-label">Faol</div>
             </div>
         </div>
-        <div class="col-6 col-md-3">
-            <div class="glass-container py-3 px-4 text-center mb-0">
-                <div class="fs-1 fw-bold text-warning">{{ $stats['pending'] }}</div>
-                <div class="text-muted small">Band qilingan</div>
+        <div class="col-6 col-lg-3">
+            <div class="section-card stat-card h-100">
+                <div class="stat-value text-warning">{{ $stats['pending'] }}</div>
+                <div class="stat-label">Jarayonda</div>
             </div>
         </div>
-        <div class="col-6 col-md-3">
-            <div class="glass-container py-3 px-4 text-center mb-0">
-                <div class="fs-1 fw-bold text-danger">{{ $stats['total_orders'] }}</div>
-                <div class="text-muted small">Buyurtmalar</div>
+        <div class="col-6 col-lg-3">
+            <div class="section-card stat-card h-100">
+                <div class="stat-value text-danger">{{ $stats['total_orders'] }}</div>
+                <div class="stat-label">Buyurtmalar</div>
             </div>
         </div>
     </div>
 
-    {{-- Мои питомцы --}}
-    <div class="glass-container mb-4">
-        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
-            <h4 class="fw-bold mb-0">
-                🐾 {{ auth()->user()->isAdmin() ? 'Barcha hayvonlar' : 'Mening hayvonlarim' }}
-            </h4>
-            <a href="{{ route('pets.create') }}" class="btn btn-sm btn-gradient px-3">➕ Qo'shish</a>
+    <div class="section-card mb-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <h4 class="mb-0">{{ auth()->user()->isAdmin() ? 'Barcha e\'lonlar' : 'Mening e\'lonlarim' }}</h4>
+            <a href="{{ route('pets.create') }}" class="btn btn-outline-primary btn-sm px-3">Qo'shish</a>
         </div>
 
         @if($pets->count() > 0)
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead style="background: linear-gradient(135deg, #667eea22, #764ba222);">
+                <table class="table align-middle">
+                    <thead>
                         <tr>
                             <th>#</th>
-                            <th>Rasm</th>
-                            <th>Nomi</th>
+                            <th>E'lon</th>
                             <th>Kategoriya</th>
                             <th>Holat</th>
                             @if(auth()->user()->isAdmin())
@@ -99,54 +81,27 @@
                             <tr>
                                 <td class="text-muted small">#{{ $pet->id }}</td>
                                 <td>
-                                    @if($pet->image)
-                                        <img src="{{ asset('storage/' . $pet->image) }}"
-                                            style="width:48px; height:48px; object-fit:cover; border-radius:8px;">
+                                    <div class="fw-semibold">{{ $pet->name }}</div>
+                                    @if($pet->type === 'lost')
+                                        <div class="small text-muted">Yo'qolgan</div>
                                     @else
-                                        <div style="width:48px; height:48px; border-radius:8px; background:linear-gradient(135deg,#667eea,#764ba2); display:flex; align-items:center; justify-content:center;">
-                                            <span>🐾</span>
-                                        </div>
+                                        <div class="small text-muted">Topilgan</div>
                                     @endif
                                 </td>
-                                <td class="fw-semibold">
-                                    <a href="{{ route('pets.show', $pet) }}" class="text-decoration-none" style="color:#667eea;">
-                                        {{ $pet->name }}
-                                    </a>
-                                </td>
+                                <td>{{ $pet->category->name }}</td>
                                 <td>
-                                    <span class="badge bg-info bg-opacity-75">
-                                        @if($pet->category->slug === 'mushuklar') 🐱
-                                        @elseif($pet->category->slug === 'itlar') 🐶
-                                        @elseif($pet->category->slug === 'qushlar') 🐦
-                                        @elseif($pet->category->slug === 'baliqlar') 🐟
-                                        @else 🐾
-                                        @endif
-                                        {{ $pet->category->name }}
+                                    <span class="badge rounded-pill {{ $pet->status === 'available' ? 'bg-success' : ($pet->status === 'pending' ? 'bg-warning text-dark' : 'bg-secondary') }}">
+                                        {{ $pet->status === 'available' ? 'Faol' : ($pet->status === 'pending' ? 'Jarayonda' : 'Hal qilingan') }}
                                     </span>
-                                </td>
-                                <td>
-                                    @if($pet->status === 'available')
-                                        <span class="badge bg-success">✅ Faol</span>
-                                    @elseif($pet->status === 'pending')
-                                        <span class="badge bg-warning text-dark">⏳ Jarayonda</span>
-                                    @else
-                                        <span class="badge bg-secondary">✔️ Hal Qilindi</span>
-                                    @endif
                                 </td>
                                 @if(auth()->user()->isAdmin())
                                     <td class="text-muted small">{{ $pet->user?->name ?? '—' }}</td>
                                 @endif
                                 <td class="text-muted small">{{ $pet->created_at->format('d.m.Y') }}</td>
                                 <td>
-                                    <div class="d-flex gap-2">
-                                        <a href="{{ route('pets.edit', $pet) }}"
-                                            class="btn btn-sm btn-outline-primary">✏️</a>
-                                        <form action="{{ route('pets.destroy', $pet) }}" method="POST"
-                                            onsubmit="return confirm('Haqiqatan ham o\'chirmoqchimisiz?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">🗑</button>
-                                        </form>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a href="{{ route('pets.show', $pet) }}" class="btn btn-sm btn-outline-primary">Ko'rish</a>
+                                        <a href="{{ route('pets.edit', $pet) }}" class="btn btn-sm btn-outline-secondary">Tahrirlash</a>
                                     </div>
                                 </td>
                             </tr>
@@ -155,24 +110,24 @@
                 </table>
             </div>
         @else
-            <div class="text-center py-5 text-muted">
-                <div class="fs-1 mb-3">🐾</div>
-                <p>Hozircha e'lonlar yo'q.</p>
-                <a href="{{ route('pets.create') }}" class="btn btn-gradient px-4">➕ Birinchi e'lonni joylash</a>
+            <div class="empty-state">
+                <div class="emoji">🐾</div>
+                <h5>Hozircha e'lon yo'q</h5>
+                <p class="mb-3">Birinchi e'lonni joylab, kabinetni to'ldiring.</p>
+                <a href="{{ route('pets.create') }}" class="btn btn-gradient px-4">E'lon joylash</a>
             </div>
         @endif
     </div>
 
-    {{-- Заказы --}}
-    <div class="glass-container">
-        <h4 class="fw-bold mb-4">
-            📋 {{ auth()->user()->isAdmin() ? 'Barcha buyurtmalar' : 'Mening buyurtmalarim' }}
-        </h4>
+    <div class="section-card">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <h4 class="mb-0">{{ auth()->user()->isAdmin() ? 'Barcha buyurtmalar' : 'Mening buyurtmalarim' }}</h4>
+        </div>
 
         @if($orders->count() > 0)
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead style="background: linear-gradient(135deg, #f093fb22, #f5576c22);">
+                <table class="table align-middle">
+                    <thead>
                         <tr>
                             <th>#</th>
                             <th>Hayvon</th>
@@ -189,25 +144,19 @@
                         @foreach($orders as $order)
                             <tr>
                                 <td class="text-muted small">#{{ $order->id }}</td>
-                                <td>
+                                <td class="fw-semibold">
                                     @if($order->pet)
-                                        <a href="{{ route('pets.show', $order->pet) }}" class="text-decoration-none fw-semibold" style="color:#667eea;">
-                                            {{ $order->pet->name }}
-                                        </a>
+                                        <a href="{{ route('pets.show', $order->pet) }}" class="text-decoration-none">{{ $order->pet->name }}</a>
                                     @else
-                                        <span class="text-muted">—</span>
+                                        —
                                     @endif
                                 </td>
                                 <td>{{ $order->customer_name }}</td>
                                 <td>{{ $order->customer_phone }}</td>
                                 <td>
-                                    @if($order->status === 'new')
-                                        <span class="badge bg-primary">🆕 Yangi</span>
-                                    @elseif($order->status === 'confirmed')
-                                        <span class="badge bg-success">✅ Tasdiqlangan</span>
-                                    @else
-                                        <span class="badge bg-secondary">{{ $order->status }}</span>
-                                    @endif
+                                    <span class="badge rounded-pill {{ $order->status === 'new' ? 'bg-primary' : ($order->status === 'confirmed' ? 'bg-success' : 'bg-secondary') }}">
+                                        {{ $order->status === 'new' ? 'Yangi' : ($order->status === 'confirmed' ? 'Tasdiqlangan' : $order->status) }}
+                                    </span>
                                 </td>
                                 @if(auth()->user()->isAdmin())
                                     <td class="text-muted small">{{ $order->user?->name ?? '—' }}</td>
@@ -219,12 +168,12 @@
                 </table>
             </div>
         @else
-            <div class="text-center py-4 text-muted">
-                <div class="fs-1 mb-2">📭</div>
-                <p class="mb-0">Hozircha buyurtmalar yo'q.</p>
+            <div class="empty-state">
+                <div class="emoji">📭</div>
+                <h5>Hozircha buyurtma yo'q</h5>
+                <p class="mb-0">Yangi buyurtmalar shu yerda ko'rinadi.</p>
             </div>
         @endif
     </div>
-
 </div>
 @endsection

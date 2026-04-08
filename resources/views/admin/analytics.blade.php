@@ -1,238 +1,171 @@
 @extends('layouts.app')
 
-@section('title', 'Аналитика — Admin')
+@section('title', 'Analitika — PawZone')
 
 @section('content')
-<div class="container-fluid py-5">
-    <div class="glass-container">
+<div class="container-xl">
+    <div class="hero-surface mb-4">
+        <span class="hero-kicker">Analitika</span>
+        <h1 class="hero-title">Statistika va trendlar</h1>
+        <p class="hero-subtitle mb-0">
+            E'lonlar bo'yicha umumiy ko'rinish, statuslar va geografik taqsimot.
+        </p>
+    </div>
 
-        <div class="mb-4">
-            <a href="{{ route('admin.dashboard') }}" class="text-decoration-none text-muted small">← Dashboard</a>
-            <h1 class="display-5 fw-bold mt-2 mb-1">📊 Аналитика</h1>
-            <p class="text-muted">Статистика и график объявлений</p>
-        </div>
-
-        {{-- Потеряно/Найдено --}}
-        <div class="row g-4 mb-5">
-            <div class="col-lg-6">
-                <div class="card border-0 shadow-sm p-4">
-                    <h5 class="fw-bold mb-4">📢 Потеряно vs Найдено</h5>
-                    <canvas id="lostFoundChart" class="w-100"></canvas>
-                </div>
-            </div>
-
-            {{-- Статусы --}}
-            <div class="col-lg-6">
-                <div class="card border-0 shadow-sm p-4">
-                    <h5 class="fw-bold mb-4">🎯 Распределение по статусам</h5>
-                    <canvas id="statusChart" class="w-100"></canvas>
-                </div>
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="section-card h-100">
+                <h5 class="mb-3">Yo'qolgan / Topilgan</h5>
+                <canvas id="lostFoundChart"></canvas>
             </div>
         </div>
-
-        {{-- Тренд по дням --}}
-        <div class="row g-4 mb-5">
-            <div class="col-12">
-                <div class="card border-0 shadow-sm p-4">
-                    <h5 class="fw-bold mb-4">📈 Тренд объявлений (последние 30 дней)</h5>
-                    <canvas id="trendChart" class="w-100"></canvas>
-                </div>
+        <div class="col-lg-6">
+            <div class="section-card h-100">
+                <h5 class="mb-3">Statuslar</h5>
+                <canvas id="statusChart"></canvas>
             </div>
         </div>
+    </div>
 
-        {{-- Категории + Регионы --}}
-        <div class="row g-4 mb-5">
-            <div class="col-lg-6">
-                <div class="card border-0 shadow-sm p-4">
-                    <h5 class="fw-bold mb-4">🐾 По категориям</h5>
-                    <canvas id="categoryChart" class="w-100"></canvas>
-                </div>
+    <div class="section-card mb-4">
+        <h5 class="mb-3">So'nggi 30 kun</h5>
+        <canvas id="trendChart"></canvas>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="section-card h-100">
+                <h5 class="mb-3">Kategoriyalar</h5>
+                <canvas id="categoryChart"></canvas>
             </div>
-
-            <div class="col-lg-6">
-                <div class="card border-0 shadow-sm p-4">
-                    <h5 class="fw-bold mb-4">📍 Топ регионов</h5>
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm border-0">
-                            <thead class="table-light">
+        </div>
+        <div class="col-lg-6">
+            <div class="section-card h-100">
+                <h5 class="mb-3">Top hududlar</h5>
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Hudud</th>
+                                <th>E'lonlar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($regionStats as $region)
                                 <tr>
-                                    <th>Регион</th>
-                                    <th>Объявлений</th>
+                                    <td class="fw-semibold">{{ $region->location }}</td>
+                                    <td><span class="badge rounded-pill bg-info">{{ $region->count }}</span></td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($regionStats as $region)
-                                    <tr>
-                                        <td class="fw-semibold">{{ $region->location }}</td>
-                                        <td>
-                                            <span class="badge bg-info">{{ $region->count }}</span>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="2" class="text-center text-muted py-3">
-                                            Нет данных
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                            @empty
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="empty-state py-4">
+                                            <div class="emoji">📭</div>
+                                            <p class="mb-0">Ma'lumot yo'q.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
-<!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
-    // Потеряно vs Найдено
-    const lostFoundCtx = document.getElementById('lostFoundChart').getContext('2d');
-    new Chart(lostFoundCtx, {
+    const palette = {
+        blue: 'rgba(59, 130, 246, 0.75)',
+        green: 'rgba(16, 185, 129, 0.75)',
+        amber: 'rgba(245, 158, 11, 0.75)',
+        slate: 'rgba(100, 116, 139, 0.75)'
+    };
+
+    new Chart(document.getElementById('lostFoundChart'), {
         type: 'doughnut',
         data: {
-            labels: ['😢 Потеряно', '🎉 Найдено'],
+            labels: ['Yo\'qolgan', 'Topilgan'],
             datasets: [{
                 data: [{{ $lostFoundStats['lost'] }}, {{ $lostFoundStats['found'] }}],
-                backgroundColor: [
-                    'rgba(245, 87, 108, 0.8)',
-                    'rgba(67, 233, 123, 0.8)',
-                ],
-                borderColor: ['#f5576c', '#43e97b'],
+                backgroundColor: [palette.blue, palette.green],
+                borderColor: ['#3b82f6', '#10b981'],
                 borderWidth: 2
             }]
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
             plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        font: { size: 13, weight: '600' },
-                        padding: 20,
-                        usePointStyle: true
-                    }
-                }
+                legend: { position: 'bottom', labels: { usePointStyle: true, padding: 18 } }
             }
         }
     });
 
-    // Статусы
-    const statusCtx = document.getElementById('statusChart').getContext('2d');
-    new Chart(statusCtx, {
+    new Chart(document.getElementById('statusChart'), {
         type: 'pie',
         data: {
-            labels: ['✅ Faol', '⏳ Jarayonda', '✔️ Hal Qilindi'],
+            labels: ['Faol', 'Jarayonda', 'Hal qilingan'],
             datasets: [{
-                data: [
-                    {{ $statusStats['available'] }},
-                    {{ $statusStats['pending'] }},
-                    {{ $statusStats['resolved'] }}
-                ],
-                backgroundColor: [
-                    'rgba(67, 233, 123, 0.8)',
-                    'rgba(250, 112, 154, 0.8)',
-                    'rgba(167, 165, 165, 0.8)',
-                ],
-                borderColor: ['#43e97b', '#fa709a', '#a7a5a5'],
+                data: [{{ $statusStats['available'] }}, {{ $statusStats['pending'] }}, {{ $statusStats['resolved'] }}],
+                backgroundColor: [palette.green, palette.amber, palette.slate],
+                borderColor: ['#10b981', '#f59e0b', '#64748b'],
                 borderWidth: 2
             }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        font: { size: 13, weight: '600' },
-                        padding: 20,
-                        usePointStyle: true
-                    }
-                }
+                legend: { position: 'bottom', labels: { usePointStyle: true, padding: 18 } }
             }
         }
     });
 
-    // Тренд по дням
-    const trendCtx = document.getElementById('trendChart').getContext('2d');
-    new Chart(trendCtx, {
+    new Chart(document.getElementById('trendChart'), {
         type: 'line',
         data: {
             labels: {!! json_encode($dailyTrend) !!},
             datasets: [{
-                label: 'Объявлений в день',
+                label: "E'lonlar",
                 data: {!! json_encode($dailyPerDay) !!},
-                borderColor: 'rgba(102, 126, 234, 1)',
-                backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                tension: 0.4,
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.10)',
                 fill: true,
-                pointRadius: 4,
-                pointBackgroundColor: 'rgba(102, 126, 234, 1)',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2
+                tension: 0.35,
+                pointRadius: 3,
+                pointBackgroundColor: '#3b82f6'
             }]
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    labels: {
-                        font: { size: 13, weight: '600' },
-                        padding: 20
-                    }
-                }
-            },
             scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: { stepSize: 1 }
-                }
+                y: { beginAtZero: true, ticks: { stepSize: 1 } }
+            },
+            plugins: {
+                legend: { display: false }
             }
         }
     });
 
-    // Категории
-    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-    new Chart(categoryCtx, {
+    new Chart(document.getElementById('categoryChart'), {
         type: 'bar',
         data: {
             labels: {!! json_encode($categoryNames) !!},
             datasets: [{
-                label: 'Объявлений',
+                label: 'E\'lonlar',
                 data: {!! json_encode(array_values($categoryStats)) !!},
-                backgroundColor: [
-                    'rgba(102, 126, 234, 0.8)',
-                    'rgba(240, 147, 251, 0.8)',
-                    'rgba(79, 172, 254, 0.8)',
-                    'rgba(67, 233, 123, 0.8)',
-                ],
-                borderColor: [
-                    '#667eea',
-                    '#f093fb',
-                    '#4facfe',
-                    '#43e97b'
-                ],
-                borderWidth: 2,
-                borderRadius: 5
+                backgroundColor: ['rgba(59, 130, 246, 0.75)', 'rgba(16, 185, 129, 0.75)', 'rgba(245, 158, 11, 0.75)', 'rgba(100, 116, 139, 0.75)'],
+                borderRadius: 8
             }]
         },
         options: {
             indexAxis: 'y',
             responsive: true,
             plugins: {
-                legend: {
-                    display: false
-                }
+                legend: { display: false }
             },
             scales: {
-                x: {
-                    beginAtZero: true,
-                    ticks: { stepSize: 1 }
-                }
+                x: { beginAtZero: true, ticks: { stepSize: 1 } }
             }
         }
     });

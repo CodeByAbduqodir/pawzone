@@ -5,7 +5,7 @@
     <input type="{{ $type }}" class="form-control @error($name) is-invalid @enderror" id="{{ $name }}"
         name="{{ $name }}" value="{{ old($name, $value) }}">
     @error($name)
-        <div class="text-danger mt-1">
+        <div class="invalid-feedback d-block">
             {{ $message }}
         </div>
     @enderror

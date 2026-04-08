@@ -1,149 +1,105 @@
 @extends('layouts.app')
 
-@section('title', "E'lon joylash — PawZone")
+@section('title', "Yangi e'lon — PawZone")
 
 @section('content')
-<div class="container my-5">
-    <div class="glass-container">
-        <div class="mb-4">
-            <a href="{{ route('dashboard') }}" class="text-decoration-none text-muted small">← Dashboard</a>
-            <h1 class="display-5 fw-bold mt-2 mb-1">📢 Yangi e'lon joylash</h1>
-            <p class="text-muted">Hayvon haqida ma'lumot kiriting</p>
-        </div>
+<div class="container-xl">
+    <div class="hero-surface mb-4">
+        <span class="hero-kicker">Yangi e'lon</span>
+        <h1 class="hero-title">Hayvon haqida e'lon joylash</h1>
+        <p class="hero-subtitle mb-0">
+            Qisqa, aniq va foydalanuvchiga tushunarli forma. Ma'lumotlar keyinroq osongina tahrirlanadi.
+        </p>
+    </div>
 
+    <div class="section-card">
         <form action="{{ route('pets.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            {{-- Тип объявления --}}
-            <div class="mb-4">
-                <label class="form-label fw-semibold">E'lon turi *</label>
-                <div class="d-flex gap-4">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="type" id="type_lost"
-                            value="lost" {{ old('type', 'lost') === 'lost' ? 'checked' : '' }} required>
-                        <label class="form-check-label fw-semibold" for="type_lost">
-                            😢 Hayvon yo'qoldi
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="type" id="type_found"
-                            value="found" {{ old('type') === 'found' ? 'checked' : '' }}>
-                        <label class="form-check-label fw-semibold" for="type_found">
-                            🎉 Hayvon topildi
-                        </label>
-                    </div>
-                </div>
-                @error('type')
-                    <div class="text-danger small mt-1">{{ $message }}</div>
-                @enderror
-            </div>
-
             <div class="row g-4">
-                <div class="col-md-6">
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Hayvon nomi / tavsiflovchi nom *</label>
-                        <input type="text" name="name"
-                            class="form-control @error('name') is-invalid @enderror"
-                            value="{{ old('name') }}"
-                            placeholder="Masalan: Bars, Qo'ng'ir mushuk"
-                            required>
-                        @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                <div class="col-lg-6">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">E'lon turi *</label>
+                        <div class="d-flex flex-wrap gap-3">
+                            <label class="chip">
+                                <input type="radio" name="type" value="lost" class="form-check-input me-2" {{ old('type', 'lost') === 'lost' ? 'checked' : '' }}>
+                                Hayvon yo'qoldi
+                            </label>
+                            <label class="chip">
+                                <input type="radio" name="type" value="found" class="form-check-input me-2" {{ old('type') === 'found' ? 'checked' : '' }}>
+                                Hayvon topildi
+                            </label>
+                        </div>
+                        @error('type')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
 
+                    <x-form-input name="name" label="Hayvon nomi" value="{{ old('name') }}" />
+
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Turi (hayvon kategoriyasi) *</label>
-                        <select name="category_id"
-                            class="form-select @error('category_id') is-invalid @enderror" required>
+                        <label class="form-label fw-semibold">Kategoriya *</label>
+                        <select name="category_id" class="form-select @error('category_id') is-invalid @enderror" required>
                             <option value="">— Kategoriyani tanlang —</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}"
-                                    {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                    @if($category->slug === 'mushuklar') 🐱
-                                    @elseif($category->slug === 'itlar') 🐶
-                                    @elseif($category->slug === 'qushlar') 🐦
-                                    @elseif($category->slug === 'baliqlar') 🐟
-                                    @else 🐾
-                                    @endif
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('category_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        @error('category_id')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">📞 Aloqa telefoni *</label>
-                        <input type="tel" name="phone"
-                            class="form-control @error('phone') is-invalid @enderror"
-                            value="{{ old('phone') }}"
-                            placeholder="+998 90 123 45 67"
-                            required>
-                        @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
+                    <x-form-input name="phone" label="Aloqa telefoni" type="tel" value="{{ old('phone') }}" />
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">✈️ Telegram username (ixtiyoriy)</label>
+                        <label class="form-label fw-semibold">Telegram username</label>
                         <div class="input-group">
                             <span class="input-group-text">@</span>
-                            <input type="text" name="telegram"
-                                class="form-control @error('telegram') is-invalid @enderror"
-                                value="{{ old('telegram') }}"
-                                placeholder="username">
+                            <input type="text" name="telegram" class="form-control @error('telegram') is-invalid @enderror" value="{{ old('telegram') }}" placeholder="username">
                         </div>
-                        <div class="form-text">Masalan: username (@ belgisisiz kiriting)</div>
-                        @error('telegram') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="form-text">Username ni @ belgisiz yozing.</div>
+                        @error('telegram')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
+
+                    <x-form-input name="location" label="Joylashuv" value="{{ old('location') }}" />
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">📍 Yo'qolgan / topilgan joy</label>
-                        <input type="text" name="location"
-                            class="form-control @error('location') is-invalid @enderror"
-                            value="{{ old('location') }}"
-                            placeholder="Masalan: Toshkent, Chilonzor tumani">
-                        @error('location') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <label class="form-label fw-semibold">Sana</label>
+                        <input type="date" name="incident_date" class="form-control @error('incident_date') is-invalid @enderror" value="{{ old('incident_date') }}" max="{{ date('Y-m-d') }}">
+                        @error('incident_date')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">📅 Sana</label>
-                        <input type="date" name="incident_date"
-                            class="form-control @error('incident_date') is-invalid @enderror"
-                            value="{{ old('incident_date') }}"
-                            max="{{ date('Y-m-d') }}">
-                        @error('incident_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
-
                 </div>
-                <div class="col-md-6">
 
+                <div class="col-lg-6">
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">📝 Tavsif / xususiyatlar</label>
-                        <textarea name="description" rows="6"
-                            class="form-control @error('description') is-invalid @enderror"
-                            placeholder="Hayvonning rangi, belgilari, maxsus xususiyatlari...">{{ old('description') }}</textarea>
-                        @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <label class="form-label fw-semibold">Tavsif</label>
+                        <textarea name="description" rows="10" class="form-control @error('description') is-invalid @enderror" placeholder="Rang, belgi, qayerda yo'qoldi yoki topildi...">{{ old('description') }}</textarea>
+                        @error('description')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">🖼 Rasm (ixtiyoriy)</label>
-                        <input type="file" name="image" accept="image/*"
-                            class="form-control @error('image') is-invalid @enderror">
-                        <div class="form-text">JPG, PNG, GIF — maksimal 2MB</div>
-                        @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    <div class="support-note mb-3">
+                        <div class="fw-semibold mb-1">Rasm qo'shish</div>
+                        <div class="small text-muted mb-3">JPG, PNG yoki GIF. Maksimal 2MB.</div>
+                        <input type="file" name="image" accept="image/*" class="form-control @error('image') is-invalid @enderror">
+                        @error('image')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
-
                 </div>
             </div>
 
-            <hr class="my-4">
-
-            <div class="d-flex justify-content-between">
-                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary px-4">
-                    ← Bekor qilish
-                </a>
-                <button type="submit" class="btn btn-gradient px-5 fw-semibold">
-                    📢 E'lonni joylash
-                </button>
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-4">
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary px-4">Bekor qilish</a>
+                <button type="submit" class="btn btn-gradient-success px-5">E'lonni joylash</button>
             </div>
         </form>
     </div>
