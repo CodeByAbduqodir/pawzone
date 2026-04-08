@@ -97,15 +97,15 @@
                         @enderror
                     </div>
 
-                    @if($pet->image)
+                    @if($pet->image_url)
                         <div class="support-note mb-3">
                             <div class="fw-semibold mb-2">Joriy rasm</div>
-                            <img src="{{ asset('storage/' . $pet->image) }}" alt="{{ $pet->name }}" class="img-fluid" style="max-width: 220px; border-radius: 18px;">
+                            <img src="{{ $pet->image_url }}" alt="{{ $pet->name }}" class="img-fluid" style="max-width: 220px; border-radius: 18px;">
                         </div>
                     @endif
 
                     <div class="support-note mb-3">
-                        <div class="fw-semibold mb-1">{{ $pet->image ? 'Rasmni almashtirish' : 'Rasm yuklash' }}</div>
+                        <div class="fw-semibold mb-1">{{ $pet->image_url ? 'Rasmni almashtirish' : 'Rasm yuklash' }}</div>
                         <div class="small text-muted mb-3">JPG, PNG yoki GIF. Maksimal 2MB.</div>
                         <input type="file" name="image" accept="image/*" class="form-control @error('image') is-invalid @enderror">
                         @error('image')

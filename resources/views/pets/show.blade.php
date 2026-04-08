@@ -49,8 +49,8 @@
     <div class="row g-4">
         <div class="col-lg-5">
             <div class="section-card h-100">
-                @if($pet->image)
-                    <img src="{{ asset('storage/' . $pet->image) }}" alt="{{ $pet->name }}" class="img-fluid w-100" style="border-radius: 18px; object-fit: cover; max-height: 460px;">
+                @if($pet->image_url)
+                    <img src="{{ $pet->image_url }}" alt="{{ $pet->name }}" class="img-fluid w-100" style="border-radius: 18px; object-fit: cover; max-height: 460px;">
                 @else
                     <div class="d-flex align-items-center justify-content-center" style="height: 420px; border-radius: 18px; background: linear-gradient(135deg, rgba(59,130,246,.90), rgba(16,185,129,.85));">
                         <span class="display-3 text-white">🐾</span>
@@ -131,8 +131,8 @@
                         @foreach($similar as $s)
                             <div class="col-md-6">
                                 <div class="card h-100">
-                                    @if($s->image)
-                                        <img src="{{ asset('storage/' . $s->image) }}" class="card-img-top" alt="{{ $s->name }}" style="height: 160px;">
+                                    @if($s->image_url)
+                                        <img src="{{ $s->image_url }}" class="card-img-top" alt="{{ $s->name }}" style="height: 160px;">
                                     @else
                                         <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 160px; background: linear-gradient(135deg, rgba(59,130,246,.90), rgba(124,58,237,.90));">
                                             <span class="fs-1 text-white">🐾</span>

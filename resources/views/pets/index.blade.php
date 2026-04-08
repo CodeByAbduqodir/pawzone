@@ -139,8 +139,8 @@
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="card h-100 overflow-hidden">
                         <div class="position-relative">
-                            @if($pet->image)
-                                <img src="{{ asset('storage/' . $pet->image) }}" class="card-img-top" alt="{{ $pet->name }}" style="height: 220px;">
+                            @if($pet->image_url)
+                                <img src="{{ $pet->image_url }}" class="card-img-top" alt="{{ $pet->name }}" style="height: 220px;">
                             @else
                                 <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 220px; background: linear-gradient(135deg, rgba(59,130,246,.90), rgba(124,58,237,.90));">
                                     <span class="display-5 text-white">🐾</span>

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Pet;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class PetSeeder extends Seeder
@@ -13,135 +14,271 @@ class PetSeeder extends Seeder
      */
     public function run(): void
     {
-        $mushuklar = Category::where('slug', 'mushuklar')->first();
-        $itlar = Category::where('slug', 'itlar')->first();
-        $qushlar = Category::where('slug', 'qushlar')->first();
-        $baliqlar = Category::where('slug', 'baliqlar')->first();
+        $categories = Category::query()->pluck('id', 'slug');
+        $users = User::query()->pluck('id', 'email');
 
-        $mushukPets = [
+        $pets = [
             [
+                'user_email' => 'admin@pawzone.local',
+                'category' => 'mushuklar',
+                'type' => 'lost',
                 'name' => 'Britaniya mushugi',
-                'price' => 1500000.00,
-                'description' => 'Ko\'k ko\'zli go\'zal britaniya mushukchasi. Yoshi 3 oy, toza va o\'rgatilgan.',
+                'description' => 'Ko‘k ko‘zli, sokin xarakterli britaniya mushugi. Yelvizakdan qo‘rqadi va uyga o‘rganib qolgan.',
+                'phone' => '+998901100001',
+                'telegram' => '@pawzone_admin',
+                'location' => 'Toshkent, Yunusobod',
+                'incident_date' => now()->subDays(4),
+                'status' => 'available',
                 'image' => 'images/pets/british-cat.jpg',
-                'status' => 'available',
             ],
             [
+                'user_email' => 'owner@pawzone.local',
+                'category' => 'mushuklar',
+                'type' => 'found',
                 'name' => 'Meyn-kun mushugi',
-                'price' => 2500000.00,
-                'description' => 'Katta va chiroyli Meyn-kun zoti. Do\'stona va o\'ynoqi.',
+                'description' => 'Katta gavdali, juda do‘stona meyn-kun mushugi. Hozircha vaqtincha qarovda.',
+                'phone' => '+998901100002',
+                'telegram' => '@pawzone_owner',
+                'location' => 'Toshkent, Chilonzor',
+                'incident_date' => now()->subDays(6),
+                'status' => 'pending',
                 'image' => 'images/pets/maine-coon.jpg',
-                'status' => 'available',
             ],
             [
+                'user_email' => 'finder@pawzone.local',
+                'category' => 'mushuklar',
+                'type' => 'lost',
                 'name' => 'Sfinks mushugi',
-                'price' => 2000000.00,
-                'description' => 'Jun yoq sfinks zoti mushukchasi. Juda mehr-oqibatli va uyqoqi.',
+                'description' => 'Junisiz sfinks mushugi. Ismi chalinganda keladi, juda mehribon.',
+                'phone' => '+998901100003',
+                'telegram' => '@pawzone_finder',
+                'location' => 'Toshkent, Mirzo Ulug‘bek',
+                'incident_date' => now()->subDays(8),
+                'status' => 'resolved',
                 'image' => 'images/pets/sphynx.jpg',
-                'status' => 'sold',
             ],
-        ];
-
-        foreach ($mushukPets as $pet) {
-            Pet::create(array_merge($pet, ['category_id' => $mushuklar->id]));
-        }
-
-        $itPets = [
             [
+                'user_email' => 'admin@pawzone.local',
+                'category' => 'mushuklar',
+                'type' => 'found',
+                'name' => 'Bengal mushugi',
+                'description' => 'Faol va o‘ynoqi bengal mushugi. Juda chaqqon, diqqat bilan qarash kerak.',
+                'phone' => '+998901100004',
+                'telegram' => null,
+                'location' => 'Toshkent, Sergeli',
+                'incident_date' => now()->subDays(2),
+                'status' => 'available',
+                'image' => 'images/pets/british-cat.jpg',
+            ],
+            [
+                'user_email' => 'owner@pawzone.local',
+                'category' => 'mushuklar',
+                'type' => 'lost',
+                'name' => 'Scottish Fold',
+                'description' => 'Buralgan quloqli shotland mushugi. Tinch va bolalarga o‘rgangan.',
+                'phone' => '+998901100005',
+                'telegram' => '@scottish_fold_demo',
+                'location' => 'Toshkent, Olmazor',
+                'incident_date' => now()->subDays(1),
+                'status' => 'available',
+                'image' => 'images/pets/maine-coon.jpg',
+            ],
+            [
+                'user_email' => 'finder@pawzone.local',
+                'category' => 'itlar',
+                'type' => 'lost',
                 'name' => 'Labrador kuchukchasi',
-                'price' => 3000000.00,
-                'description' => 'Aqlli va do\'stona labrador kuchukchasi. Bolalar bilan juda yaxshi til topadi.',
+                'description' => 'Mehribon va sodiq labrador kuchukchasi. Bog‘ sayrlarini yaxshi ko‘radi.',
+                'phone' => '+998901100006',
+                'telegram' => '@labrador_demo',
+                'location' => 'Toshkent, Yashnobod',
+                'incident_date' => now()->subDays(3),
+                'status' => 'available',
                 'image' => 'images/pets/labrador.jpg',
-                'status' => 'available',
             ],
             [
-                'name' => 'Nemis cho\'poni',
-                'price' => 3500000.00,
-                'description' => 'Zotli nemis cho\'pon iti. A\'lo qo\'riqchi va hamroh.',
+                'user_email' => 'admin@pawzone.local',
+                'category' => 'itlar',
+                'type' => 'found',
+                'name' => 'Nemis cho‘poni',
+                'description' => 'Aqlli va hushyor nemis cho‘poni. Ajoyib qo‘riqchi bo‘la oladi.',
+                'phone' => '+998901100007',
+                'telegram' => '@german_shepherd_demo',
+                'location' => 'Toshkent, Shayxontohur',
+                'incident_date' => now()->subDays(7),
+                'status' => 'pending',
                 'image' => 'images/pets/german-shepherd.jpg',
-                'status' => 'available',
             ],
             [
+                'user_email' => 'owner@pawzone.local',
+                'category' => 'itlar',
+                'type' => 'lost',
                 'name' => 'Xaski',
-                'price' => 2800000.00,
-                'description' => 'Ko\'k ko\'zli energik xaski kuchukchasi. Faol sayrlar talab qiladi.',
+                'description' => 'Energiya to‘la xaski. Kuniga uzoq yurish va faol o‘yin kerak.',
+                'phone' => '+998901100008',
+                'telegram' => '@husky_demo',
+                'location' => 'Toshkent, Bektemir',
+                'incident_date' => now()->subDays(5),
+                'status' => 'available',
                 'image' => 'images/pets/husky.jpg',
-                'status' => 'available',
             ],
             [
+                'user_email' => 'finder@pawzone.local',
+                'category' => 'itlar',
+                'type' => 'found',
                 'name' => 'Yorkshir terer',
-                'price' => 2200000.00,
-                'description' => 'Kichkina yorkshir teryer. Kvartira uchun ideal, mehribon va o\'ynoqi.',
+                'description' => 'Kichkina, nafis va juda chaqqon yorkshir terer. Kvartira uchun mos.',
+                'phone' => '+998901100009',
+                'telegram' => null,
+                'location' => 'Toshkent, Uchtepa',
+                'incident_date' => now()->subDays(9),
+                'status' => 'resolved',
                 'image' => 'images/pets/yorkie.jpg',
-                'status' => 'sold',
             ],
-        ];
-
-        foreach ($itPets as $pet) {
-            Pet::create(array_merge($pet, ['category_id' => $itlar->id]));
-        }
-
-        $qushPets = [
             [
-                'name' => 'To\'lqinsimon to\'tiqush',
-                'price' => 150000.00,
-                'description' => 'Rang-barang to\'lqinsimon to\'tiqush. Tez o\'rganadi va gapira oladi.',
+                'user_email' => 'admin@pawzone.local',
+                'category' => 'itlar',
+                'type' => 'found',
+                'name' => 'Golden retriver',
+                'description' => 'Yaxshi kayfiyatli, oson o‘rgatiladigan retriver. A’lo oilaviy hamroh.',
+                'phone' => '+998901100010',
+                'telegram' => '@golden_demo',
+                'location' => 'Toshkent, Mirobod',
+                'incident_date' => now()->subDays(12),
+                'status' => 'available',
+                'image' => 'images/pets/labrador.jpg',
+            ],
+            [
+                'user_email' => 'owner@pawzone.local',
+                'category' => 'qushlar',
+                'type' => 'lost',
+                'name' => 'To‘lqinsimon to‘tiqush',
+                'description' => 'Rang-barang va juda qiziquvchan to‘lqinsimon to‘tiqush. Tez gapirishni o‘rganadi.',
+                'phone' => '+998901100011',
+                'telegram' => '@budgie_demo',
+                'location' => 'Toshkent, Yunusobod',
+                'incident_date' => now()->subDays(2),
+                'status' => 'available',
                 'image' => 'images/pets/budgie.jpg',
-                'status' => 'available',
             ],
             [
-                'name' => 'Korella to\'tiqushi',
-                'price' => 350000.00,
-                'description' => 'Jufti bor korella to\'tiqushi. Juda suhbatdosh va musiqiy.',
+                'user_email' => 'finder@pawzone.local',
+                'category' => 'qushlar',
+                'type' => 'found',
+                'name' => 'Korella to‘tiqushi',
+                'description' => 'Sokin va hamrohga oson o‘rganadigan korella to‘tiqushi. Kuylarni yaxshi ko‘radi.',
+                'phone' => '+998901100012',
+                'telegram' => '@cockatiel_demo',
+                'location' => 'Toshkent, Chilonzor',
+                'incident_date' => now()->subDays(4),
+                'status' => 'pending',
                 'image' => 'images/pets/cockatiel.jpg',
-                'status' => 'available',
             ],
             [
-                'name' => 'Kanareyka qushi',
-                'price' => 250000.00,
-                'description' => 'Sariqlash rangdagi sayrashi chiroyli kanareyka.',
+                'user_email' => 'admin@pawzone.local',
+                'category' => 'qushlar',
+                'type' => 'lost',
+                'name' => 'Kanareyka',
+                'description' => 'Chiroyli sayrovchi kanareyka. Ertalab tinch ovozda sayraydi.',
+                'phone' => '+998901100013',
+                'telegram' => null,
+                'location' => 'Toshkent, Sergeli',
+                'incident_date' => now()->subDays(10),
+                'status' => 'resolved',
                 'image' => 'images/pets/canary.jpg',
-                'status' => 'available',
             ],
-        ];
-
-        foreach ($qushPets as $pet) {
-            Pet::create(array_merge($pet, ['category_id' => $qushlar->id]));
-        }
-
-        $baliqPets = [
             [
+                'user_email' => 'owner@pawzone.local',
+                'category' => 'qushlar',
+                'type' => 'found',
+                'name' => 'Ara to‘tiqushi',
+                'description' => 'Katta va rangli ara to‘tiqushi. Juda aqlli va ovozini tez taniydi.',
+                'phone' => '+998901100014',
+                'telegram' => '@macaw_demo',
+                'location' => 'Toshkent, Olmazor',
+                'incident_date' => now()->subDays(14),
+                'status' => 'available',
+                'image' => 'images/pets/cockatiel.jpg',
+            ],
+            [
+                'user_email' => 'finder@pawzone.local',
+                'category' => 'baliqlar',
+                'type' => 'found',
                 'name' => 'Oltin baliq',
-                'price' => 50000,
-                'description' => 'Klassik oltin baliq. Parvarishi oson.',
+                'description' => 'Klassik oltin baliq. Akvarium uchun sodda va chiroyli variant.',
+                'phone' => '+998901100015',
+                'telegram' => '@goldfish_demo',
+                'location' => 'Toshkent, Mirobod',
+                'incident_date' => now()->subDays(1),
+                'status' => 'available',
                 'image' => 'images/pets/goldfish.jpg',
-                'status' => 'available',
             ],
             [
-                'name' => 'Betta baliqi (Petushok)',
-                'price' => 80000,
-                'description' => 'Go\'zal qanotlari bor yorqin ko\'k rangdagi jangchi baliqi.',
+                'user_email' => 'admin@pawzone.local',
+                'category' => 'baliqlar',
+                'type' => 'lost',
+                'name' => 'Betta baliqi',
+                'description' => 'Yorqin rangli betta baliqi. Yakka saqlash uchun qulay va chiroyli.',
+                'phone' => '+998901100016',
+                'telegram' => null,
+                'location' => 'Toshkent, Yashnobod',
+                'incident_date' => now()->subDays(3),
+                'status' => 'pending',
                 'image' => 'images/pets/betta.jpg',
-                'status' => 'available',
             ],
             [
-                'name' => 'Neon tetra (10 dona)',
-                'price' => 120000,
-                'description' => '10 dona neon tetra baliqlari. Neon chizig\'i bor chiroyli kichik baliqlar.',
+                'user_email' => 'owner@pawzone.local',
+                'category' => 'baliqlar',
+                'type' => 'found',
+                'name' => 'Neon tetra',
+                'description' => 'Kichik, ammo juda jozibali neon tetra. Suruvda yashashni yaxshi ko‘radi.',
+                'phone' => '+998901100017',
+                'telegram' => '@neon_tetra_demo',
+                'location' => 'Toshkent, Uchtepa',
+                'incident_date' => now()->subDays(6),
+                'status' => 'available',
                 'image' => 'images/pets/neon-tetra.jpg',
-                'status' => 'available',
             ],
             [
-                'name' => 'Guppi (juft)',
-                'price' => 60000,
-                'description' => 'Rang-barang guppi juftligi. Oson ko\'payadi.',
+                'user_email' => 'finder@pawzone.local',
+                'category' => 'baliqlar',
+                'type' => 'lost',
+                'name' => 'Guppi juftligi',
+                'description' => 'Rang-barang guppi juftligi. Faol va tez ko‘payadigan akvarium baliqlari.',
+                'phone' => '+998901100018',
+                'telegram' => '@guppy_demo',
+                'location' => 'Toshkent, Bektemir',
+                'incident_date' => now()->subDays(11),
+                'status' => 'resolved',
                 'image' => 'images/pets/guppy.jpg',
-                'status' => 'sold',
             ],
         ];
 
-        foreach ($baliqPets as $pet) {
-            Pet::create(array_merge($pet, ['category_id' => $baliqlar->id]));
+        foreach ($pets as $pet) {
+            $categoryId = $categories[$pet['category']] ?? null;
+            $userId = $users[$pet['user_email']] ?? null;
+
+            if (! $categoryId || ! $userId) {
+                continue;
+            }
+
+            Pet::updateOrCreate(
+                [
+                    'category_id' => $categoryId,
+                    'name' => $pet['name'],
+                ],
+                [
+                    'user_id' => $userId,
+                    'type' => $pet['type'],
+                    'description' => $pet['description'],
+                    'phone' => $pet['phone'],
+                    'telegram' => $pet['telegram'],
+                    'location' => $pet['location'],
+                    'incident_date' => $pet['incident_date'],
+                    'image' => $pet['image'],
+                    'status' => $pet['status'],
+                ]
+            );
         }
     }
 }
