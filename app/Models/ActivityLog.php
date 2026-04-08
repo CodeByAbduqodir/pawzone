@@ -34,5 +34,15 @@ class ActivityLog extends Model
     {
         return $this->belongsTo(Pet::class);
     }
-}
 
+    public function actionLabel(): string
+    {
+        return match ($this->action) {
+            'created' => 'Yaratildi',
+            'updated' => 'Yangilandi',
+            'deleted' => 'O\'chirildi',
+            'moderated' => 'Moderatsiya',
+            default => ucfirst((string) $this->action),
+        };
+    }
+}

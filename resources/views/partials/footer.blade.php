@@ -19,7 +19,7 @@
                 <div class="d-grid gap-2 small">
                     <a href="{{ route('pets.index') }}">E'lonlar</a>
                     @auth
-                        <a href="{{ route('dashboard') }}">Dashboard</a>
+                        <a href="{{ route('dashboard') }}">Kabinet</a>
                         <a href="{{ route('pets.create') }}">Yangi e'lon</a>
                     @else
                         <a href="{{ route('login') }}">Kirish</a>

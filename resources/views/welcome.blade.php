@@ -123,14 +123,14 @@
 
                     <div class="chips">
                         <span class="chip">Katalog</span>
-                        <span class="chip">Dashboard</span>
+                        <span class="chip">Kabinet</span>
                         <span class="chip">Moderatsiya</span>
                     </div>
 
                     <div class="actions">
                         <a class="btn btn-primary" href="{{ route('pets.index') }}">E'lonlarni ko'rish</a>
                         @auth
-                            <a class="btn btn-secondary" href="{{ route('dashboard') }}">Dashboard</a>
+                            <a class="btn btn-secondary" href="{{ route('dashboard') }}">Kabinet</a>
                         @else
                             <a class="btn btn-secondary" href="{{ route('login') }}">Kirish</a>
                         @endauth

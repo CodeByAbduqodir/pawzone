@@ -45,7 +45,7 @@
                     <tr>
                         <th>Vaqt</th>
                         <th>Foydalanuvchi</th>
-                        <th>Xarakat</th>
+                        <th>Harakat</th>
                         <th>E'lon</th>
                         <th>IP</th>
                         <th>Tafsilot</th>
@@ -60,7 +60,7 @@
                                 <div class="small text-muted">{{ $log->user->email }}</div>
                             </td>
                             <td>
-                                <span class="badge rounded-pill text-bg-light border">{{ $log->action }}</span>
+                                <span class="badge rounded-pill text-bg-light border">{{ $log->actionLabel() }}</span>
                             </td>
                             <td>
                                 @if($log->pet)

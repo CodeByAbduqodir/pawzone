@@ -96,7 +96,7 @@ class PetController extends Controller
 
         // Проверка дневного лимита
         $dailyListings = Pet::where('user_id', auth()->id())
-            ->where('created_at', '>=', now()->subDay())
+            ->whereDate('created_at', now()->toDateString())
             ->count();
         $maxPerDay = config('pets.max_listings_per_day', 3);
 

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="theme-color" content="#f4f7fb">
-    <title>@yield('title', 'PawZone - Uy hayvonlari do\'koni')</title>
+    <title>@yield('title', 'PawZone - Uy hayvonlari platformasi')</title>
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">

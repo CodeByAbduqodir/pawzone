@@ -8,7 +8,7 @@
         <span class="hero-kicker">Tahrirlash</span>
         <h1 class="hero-title">{{ $pet->name }}</h1>
         <p class="hero-subtitle mb-0">
-            E'lon ma'lumotlarini yangilang, holatni o'zgartiring yoki rasmni almashtiring.
+            E'lon ma'lumotlarini yangilang, holatni boshqaring yoki rasmni almashtiring.
         </p>
     </div>
 
@@ -24,11 +24,11 @@
                         <div class="d-flex flex-wrap gap-3">
                             <label class="chip">
                                 <input type="radio" name="type" value="lost" class="form-check-input me-2" {{ old('type', $pet->type) === 'lost' ? 'checked' : '' }}>
-                                Hayvon yo'qoldi
+                                Hayvon yo'qolgan
                             </label>
                             <label class="chip">
                                 <input type="radio" name="type" value="found" class="form-check-input me-2" {{ old('type', $pet->type) === 'found' ? 'checked' : '' }}>
-                                Hayvon topildi
+                                Hayvon topilgan
                             </label>
                         </div>
                         @error('type')
@@ -80,7 +80,7 @@
                         <select name="status" class="form-select @error('status') is-invalid @enderror" required>
                             <option value="available" {{ old('status', $pet->status) === 'available' ? 'selected' : '' }}>Faol</option>
                             <option value="pending" {{ old('status', $pet->status) === 'pending' ? 'selected' : '' }}>Jarayonda</option>
-                            <option value="resolved" {{ old('status', $pet->status) === 'resolved' ? 'selected' : '' }}>Hal qilingan</option>
+                            <option value="resolved" {{ old('status', $pet->status) === 'resolved' ? 'selected' : '' }}>Yopiq</option>
                         </select>
                         @error('status')
                             <div class="invalid-feedback d-block">{{ $message }}</div>

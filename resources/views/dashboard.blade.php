@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard — PawZone')
+@section('title', 'Kabinet — PawZone')
 
 @section('content')
 <div class="container-xl">
     <div class="hero-surface mb-4">
         <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
             <div>
-                <span class="hero-kicker">Dashboard</span>
+                <span class="hero-kicker">Kabinet</span>
                 <h1 class="hero-title">Xush kelibsiz, {{ auth()->user()->name }}!</h1>
                 <p class="hero-subtitle mb-0">
                     E'lonlar, buyurtmalar va holatlarni bir ekranda kuzating.
@@ -90,8 +90,8 @@
                                 </td>
                                 <td>{{ $pet->category->name }}</td>
                                 <td>
-                                    <span class="badge rounded-pill {{ $pet->status === 'available' ? 'bg-success' : ($pet->status === 'pending' ? 'bg-warning text-dark' : 'bg-secondary') }}">
-                                        {{ $pet->status === 'available' ? 'Faol' : ($pet->status === 'pending' ? 'Jarayonda' : 'Hal qilingan') }}
+                                    <span class="badge rounded-pill {{ $pet->statusBadgeClass() }}">
+                                        {{ $pet->statusLabel() }}
                                     </span>
                                 </td>
                                 @if(auth()->user()->isAdmin())
@@ -154,8 +154,8 @@
                                 <td>{{ $order->customer_name }}</td>
                                 <td>{{ $order->customer_phone }}</td>
                                 <td>
-                                    <span class="badge rounded-pill {{ $order->status === 'new' ? 'bg-primary' : ($order->status === 'confirmed' ? 'bg-success' : 'bg-secondary') }}">
-                                        {{ $order->status === 'new' ? 'Yangi' : ($order->status === 'confirmed' ? 'Tasdiqlangan' : $order->status) }}
+                                    <span class="badge rounded-pill {{ $order->statusBadgeClass() }}">
+                                        {{ $order->statusLabel() }}
                                     </span>
                                 </td>
                                 @if(auth()->user()->isAdmin())

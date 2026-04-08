@@ -15,7 +15,7 @@
                 </p>
                 <div class="hero-badges">
                     <span class="chip chip-soft">Katalog</span>
-                    <span class="chip chip-success">Dashboard</span>
+                    <span class="chip chip-success">Kabinet</span>
                     <span class="chip">Admin panel</span>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                 <div class="d-grid gap-2">
                     <a href="{{ route('pets.index') }}" class="btn btn-gradient">E'lonlarni ko'rish</a>
                     @auth
-                        <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">Dashboard</a>
+                        <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">Kabinet</a>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-outline-secondary">Kirish</a>
                     @endauth

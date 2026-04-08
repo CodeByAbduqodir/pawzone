@@ -21,7 +21,7 @@
         </div>
         <div class="col-lg-6">
             <div class="section-card h-100">
-                <h5 class="mb-3">Statuslar</h5>
+                <h5 class="mb-3">Holatlar</h5>
                 <canvas id="statusChart"></canvas>
             </div>
         </div>
@@ -105,7 +105,7 @@
     new Chart(document.getElementById('statusChart'), {
         type: 'pie',
         data: {
-            labels: ['Faol', 'Jarayonda', 'Hal qilingan'],
+            labels: ['Faol', 'Jarayonda', 'Yopiq'],
             datasets: [{
                 data: [{{ $statusStats['available'] }}, {{ $statusStats['pending'] }}, {{ $statusStats['resolved'] }}],
                 backgroundColor: [palette.green, palette.amber, palette.slate],

@@ -15,7 +15,7 @@
 
                 <div class="hero-badges">
                     <span class="chip chip-soft">Tezkor kirish</span>
-                    <span class="chip chip-success">Dashboard</span>
+                    <span class="chip chip-success">Kabinet</span>
                     <span class="chip">Admin nazorati</span>
                 </div>
             </div>

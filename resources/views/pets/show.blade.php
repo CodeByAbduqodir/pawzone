@@ -30,10 +30,10 @@
 
             <div class="d-flex flex-column align-items-start gap-2">
                 <span class="badge rounded-pill text-bg-light border px-3 py-2">
-                    {{ $pet->type === 'lost' ? 'Yo\'qoldi' : 'Topildi' }}
+                    {{ $pet->typeLabel() }}
                 </span>
-                <span class="badge rounded-pill {{ $pet->status === 'available' ? 'bg-success' : ($pet->status === 'pending' ? 'bg-warning text-dark' : 'bg-secondary') }} px-3 py-2">
-                    {{ $pet->status === 'available' ? 'Faol' : ($pet->status === 'pending' ? 'Jarayonda' : 'Hal qilingan') }}
+                <span class="badge rounded-pill {{ $pet->statusBadgeClass() }} px-3 py-2">
+                    {{ $pet->statusLabel() }}
                 </span>
             </div>
         </div>
@@ -82,7 +82,7 @@
                     </div>
                     <div class="meta-item">
                         <div class="small text-muted mb-1">Holat</div>
-                        <div class="fw-semibold">{{ $pet->status === 'available' ? 'Faol' : ($pet->status === 'pending' ? 'Jarayonda' : 'Hal qilingan') }}</div>
+                        <div class="fw-semibold">{{ $pet->statusLabel() }}</div>
                     </div>
                 </div>
 
@@ -100,7 +100,7 @@
                     </div>
                 @else
                     <div class="alert alert-info mb-4">
-                        Bu e'lon yopilgan. Hayvon topilgan yoki qaytarilgan.
+                        Bu e'lon yopiq. Hayvon topilgan yoki qaytarilgan.
                     </div>
                 @endif
 
@@ -141,7 +141,7 @@
 
                                     <div class="card-body">
                                         <div class="d-flex flex-wrap gap-2 mb-2">
-                                            <span class="badge rounded-pill text-bg-light border">{{ $s->type === 'lost' ? 'Yo\'qoldi' : 'Topildi' }}</span>
+                                            <span class="badge rounded-pill text-bg-light border">{{ $s->typeLabel() }}</span>
                                             <span class="badge rounded-pill text-bg-light border">{{ $s->category->name }}</span>
                                         </div>
                                         <h6 class="mb-2">{{ $s->name }}</h6>

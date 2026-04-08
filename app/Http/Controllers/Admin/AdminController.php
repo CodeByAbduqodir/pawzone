@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Pet;
 use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -63,13 +64,14 @@ class AdminController extends Controller
             'reason' => 'nullable|string|max:500',
         ]);
 
-        $status = $request->action === 'approve' ? 'available' : 'pending';
+        $moderationStatus = $request->action === 'approve' ? 'approved' : 'rejected';
+        $petStatus = $request->action === 'approve' ? 'available' : 'resolved';
         $oldStatus = $pet->status;
 
-        $pet->update(['status' => $status]);
+        $pet->update(['status' => $petStatus]);
 
         // Логируем модерацию
-        ActivityLogService::logModerate($pet, $status, $request->reason, $request);
+        ActivityLogService::logModerate($pet, $moderationStatus, $oldStatus, $request->reason, $request);
 
         $message = $request->action === 'approve'
             ? "E'lon ✅ tasdiqlandi!"
@@ -110,6 +112,8 @@ class AdminController extends Controller
     public function deletePet(Pet $pet)
     {
         ActivityLogService::logDelete($pet);
+
+        $this->deletePetImage($pet);
         $pet->delete();
 
         return redirect()->route('admin.dashboard')
@@ -177,5 +181,19 @@ class AdminController extends Controller
             'regionStats'
         ));
     }
-}
 
+    private function deletePetImage(Pet $pet): void
+    {
+        if (! $pet->image) {
+            return;
+        }
+
+        if (file_exists(public_path($pet->image))) {
+            return;
+        }
+
+        if (Storage::disk('public')->exists($pet->image)) {
+            Storage::disk('public')->delete($pet->image);
+        }
+    }
+}

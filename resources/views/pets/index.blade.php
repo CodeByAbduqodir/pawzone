@@ -56,7 +56,7 @@
                     <label class="form-label">Turi</label>
                     <select name="type" class="form-select" onchange="this.form.submit()">
                         <option value="">Barchasi</option>
-                        <option value="lost" {{ request('type') === 'lost' ? 'selected' : '' }}>Yo'qoldi</option>
+                        <option value="lost" {{ request('type') === 'lost' ? 'selected' : '' }}>Yo'qolgan</option>
                         <option value="found" {{ request('type') === 'found' ? 'selected' : '' }}>Topildi</option>
                     </select>
                 </div>
@@ -67,7 +67,7 @@
                         <option value="">Barchasi</option>
                         <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>Faol</option>
                         <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Jarayonda</option>
-                        <option value="resolved" {{ request('status') === 'resolved' ? 'selected' : '' }}>Hal qilingan</option>
+                        <option value="resolved" {{ request('status') === 'resolved' ? 'selected' : '' }}>Yopiq</option>
                     </select>
                 </div>
 
@@ -148,8 +148,8 @@
                             @endif
 
                             <div class="position-absolute top-0 end-0 p-2">
-                                <span class="badge badge-modern {{ $pet->status === 'available' ? 'bg-success' : ($pet->status === 'pending' ? 'bg-warning text-dark' : 'bg-secondary') }}">
-                                    {{ $pet->status === 'available' ? 'Faol' : ($pet->status === 'pending' ? 'Jarayonda' : 'Hal qilingan') }}
+                                <span class="badge badge-modern {{ $pet->statusBadgeClass() }}">
+                                    {{ $pet->statusLabel() }}
                                 </span>
                             </div>
                         </div>
@@ -157,7 +157,7 @@
                         <div class="card-body d-flex flex-column">
                             <div class="mb-2 d-flex flex-wrap gap-2">
                                 <span class="badge rounded-pill text-bg-light border">
-                                    {{ $pet->type === 'lost' ? 'Yo\'qoldi' : 'Topildi' }}
+                                    {{ $pet->typeLabel() }}
                                 </span>
                                 <span class="badge rounded-pill text-bg-light border">
                                     {{ $pet->category->name }}

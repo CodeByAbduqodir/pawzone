@@ -31,7 +31,7 @@ class ActivityLogService
     /**
      * Запись логирования при создании объявления
      */
-    public static function logCreate(Pet $pet, Request $request = null): ActivityLog
+    public static function logCreate(Pet $pet, ?Request $request = null): ActivityLog
     {
         return self::log(
             auth()->id(),
@@ -47,7 +47,7 @@ class ActivityLogService
     /**
      * Запись логирования при изменении объявления
      */
-    public static function logUpdate(Pet $pet, array $oldData, Request $request = null): ActivityLog
+    public static function logUpdate(Pet $pet, array $oldData, ?Request $request = null): ActivityLog
     {
         return self::log(
             auth()->id(),
@@ -63,7 +63,7 @@ class ActivityLogService
     /**
      * Запись логирования при удалении объявления
      */
-    public static function logDelete(Pet $pet, Request $request = null): ActivityLog
+    public static function logDelete(Pet $pet, ?Request $request = null): ActivityLog
     {
         return self::log(
             auth()->id(),
@@ -79,14 +79,14 @@ class ActivityLogService
     /**
      * Запись логирования при модерации объявления
      */
-    public static function logModerate(Pet $pet, string $status, ?string $reason = null, Request $request = null): ActivityLog
+    public static function logModerate(Pet $pet, string $status, ?string $previousStatus = null, ?string $reason = null, ?Request $request = null): ActivityLog
     {
         return self::log(
             auth()->id(),
             'moderated',
             $pet,
-            ['previous_status' => $pet->status],
-            ['status' => $status, 'reason' => $reason],
+            ['previous_status' => $previousStatus ?? $pet->status],
+            ['status' => $status, 'pet_status' => $pet->status, 'reason' => $reason],
             $status,
             $request
         );

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard — PawZone')
+@section('title', 'Admin panel — PawZone')
 
 @section('content')
 <div class="container-xl">
@@ -35,10 +35,10 @@
             <div class="section-card stat-card h-100"><div class="stat-value text-warning">{{ $stats['pending'] }}</div><div class="stat-label">Jarayonda</div></div>
         </div>
         <div class="col-6 col-lg-2">
-            <div class="section-card stat-card h-100"><div class="stat-value text-secondary">{{ $stats['resolved'] }}</div><div class="stat-label">Hal qilingan</div></div>
+            <div class="section-card stat-card h-100"><div class="stat-value text-secondary">{{ $stats['resolved'] }}</div><div class="stat-label">Yopiq</div></div>
         </div>
         <div class="col-6 col-lg-2">
-            <div class="section-card stat-card h-100"><div class="stat-value text-danger">{{ $stats['lost'] }}</div><div class="stat-label">Yo'qoldi</div></div>
+            <div class="section-card stat-card h-100"><div class="stat-value text-danger">{{ $stats['lost'] }}</div><div class="stat-label">Yo'qolgan</div></div>
         </div>
         <div class="col-6 col-lg-2">
             <div class="section-card stat-card h-100"><div class="stat-value text-info">{{ $stats['found'] }}</div><div class="stat-label">Topildi</div></div>
@@ -57,14 +57,14 @@
                     <option value="">Barchasi</option>
                     <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>Faol</option>
                     <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Jarayonda</option>
-                    <option value="resolved" {{ request('status') === 'resolved' ? 'selected' : '' }}>Hal qilingan</option>
+                    <option value="resolved" {{ request('status') === 'resolved' ? 'selected' : '' }}>Yopiq</option>
                 </select>
             </div>
             <div class="col-lg-2 col-md-6">
                 <label class="form-label">Turi</label>
                 <select name="type" class="form-select" onchange="this.form.submit()">
                     <option value="">Barchasi</option>
-                    <option value="lost" {{ request('type') === 'lost' ? 'selected' : '' }}>Yo'qoldi</option>
+                    <option value="lost" {{ request('type') === 'lost' ? 'selected' : '' }}>Yo'qolgan</option>
                     <option value="found" {{ request('type') === 'found' ? 'selected' : '' }}>Topildi</option>
                 </select>
             </div>
@@ -108,13 +108,13 @@
                             </td>
                             <td>
                                 <span class="badge rounded-pill text-bg-light border">
-                                    {{ $pet->type === 'lost' ? 'Yo\'qoldi' : 'Topildi' }}
+                                    {{ $pet->typeLabel() }}
                                 </span>
                             </td>
                             <td><a href="tel:{{ $pet->phone }}">{{ $pet->phone }}</a></td>
                             <td>
-                                <span class="badge rounded-pill {{ $pet->status === 'available' ? 'bg-success' : ($pet->status === 'pending' ? 'bg-warning text-dark' : 'bg-secondary') }}">
-                                    {{ $pet->status === 'available' ? 'Faol' : ($pet->status === 'pending' ? 'Jarayonda' : 'Hal qilingan') }}
+                                <span class="badge rounded-pill {{ $pet->statusBadgeClass() }}">
+                                    {{ $pet->statusLabel() }}
                                 </span>
                             </td>
                             <td class="text-muted small">{{ $pet->created_at->format('d.m.Y H:i') }}</td>
@@ -127,7 +127,9 @@
                                         <form action="{{ route('admin.moderate', $pet) }}" method="POST" class="d-inline">
                                             @csrf
                                             <input type="hidden" name="action" value="approve">
-                                            <button type="submit" class="btn btn-sm btn-success">Faollashtirish</button>
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                {{ $pet->status === 'pending' ? 'Tasdiqlash' : 'Qayta ochish' }}
+                                            </button>
                                         </form>
                                     @endif
 
@@ -135,7 +137,7 @@
                                         <form action="{{ route('admin.moderate', $pet) }}" method="POST" class="d-inline">
                                             @csrf
                                             <input type="hidden" name="action" value="reject">
-                                            <button type="submit" class="btn btn-sm btn-warning text-dark">Yopish</button>
+                                            <button type="submit" class="btn btn-sm btn-warning text-dark">Yopiq qilish</button>
                                         </form>
                                     @endif
 
@@ -181,7 +183,7 @@
                         <tr>
                             <th>Vaqt</th>
                             <th>Foydalanuvchi</th>
-                            <th>Xarakat</th>
+                            <th>Harakat</th>
                             <th>E'lon</th>
                         </tr>
                     </thead>
@@ -191,7 +193,7 @@
                                 <td class="text-muted small">{{ $log->created_at->format('d.m.Y H:i') }}</td>
                                 <td>{{ $log->user->name }}</td>
                                 <td>
-                                    <span class="badge rounded-pill text-bg-light border">{{ $log->action }}</span>
+                                    <span class="badge rounded-pill text-bg-light border">{{ $log->actionLabel() }}</span>
                                 </td>
                                 <td>
                                     @if($log->pet)

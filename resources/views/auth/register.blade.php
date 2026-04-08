@@ -16,7 +16,7 @@
                 <div class="hero-badges">
                     <span class="chip chip-soft">Owner</span>
                     <span class="chip chip-success">Finder</span>
-                    <span class="chip">Shaxsiy kabinet</span>
+                    <span class="chip">Kabinet</span>
                 </div>
             </div>
 

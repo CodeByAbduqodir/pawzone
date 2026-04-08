@@ -26,4 +26,24 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function statusLabel(): string
+    {
+        return match ($this->status) {
+            'new' => 'Yangi',
+            'confirmed' => 'Tasdiqlangan',
+            'cancelled' => 'Bekor qilingan',
+            default => ucfirst((string) $this->status),
+        };
+    }
+
+    public function statusBadgeClass(): string
+    {
+        return match ($this->status) {
+            'new' => 'bg-primary',
+            'confirmed' => 'bg-success',
+            'cancelled' => 'bg-secondary',
+            default => 'bg-secondary',
+        };
+    }
 }

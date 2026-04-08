@@ -51,11 +51,7 @@ class Pet extends Model
             return asset($this->image);
         }
 
-        if (Storage::disk('public')->exists($this->image)) {
-            return asset('storage/' . ltrim($this->image, '/'));
-        }
-
-        return asset('storage/' . ltrim($this->image, '/'));
+        return Storage::disk('public')->url($this->image);
     }
 
     public function isLost(): bool
@@ -66,6 +62,31 @@ class Pet extends Model
     public function isFound(): bool
     {
         return $this->type === 'found';
+    }
+
+    public function typeLabel(): string
+    {
+        return $this->type === 'lost' ? 'Yo\'qolgan' : 'Topilgan';
+    }
+
+    public function statusLabel(): string
+    {
+        return match ($this->status) {
+            'available' => 'Faol',
+            'pending' => 'Jarayonda',
+            'resolved' => 'Yopiq',
+            default => ucfirst((string) $this->status),
+        };
+    }
+
+    public function statusBadgeClass(): string
+    {
+        return match ($this->status) {
+            'available' => 'bg-success',
+            'pending' => 'bg-warning text-dark',
+            'resolved' => 'bg-secondary',
+            default => 'bg-secondary',
+        };
     }
 
     /**

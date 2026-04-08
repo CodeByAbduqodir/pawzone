@@ -48,7 +48,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
                             href="{{ route('dashboard') }}">
-                            Dashboard
+                            Kabinet
                         </a>
                     </li>
                     @if(auth()->user()->isAdmin())
@@ -83,7 +83,7 @@
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <a class="dropdown-item" href="{{ route('dashboard') }}">
-                                    Dashboard
+                                    Kabinet
                                 </a>
                             </li>
                             @if(auth()->user()->isAdmin())
