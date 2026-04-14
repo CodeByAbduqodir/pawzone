@@ -165,7 +165,7 @@
 
         @if($pets->hasPages())
             <div class="d-flex justify-content-center mt-4">
-                {{ $pets->links('vendor.pagination.bootstrap-5') }}
+                {{ $pets->links('pagination.pawzone') }}
             </div>
         @endif
     </div>
