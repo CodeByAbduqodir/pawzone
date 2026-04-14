@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-xl">
     <div class="hero-surface mb-4">
-        <span class="hero-kicker">Analitika</span>
+        <span class="hero-kicker">ka</span>
         <h1 class="hero-title">Statistika va trendlar</h1>
         <p class="hero-subtitle mb-0">
             E'lonlar bo'yicha umumiy ko'rinish, statuslar va geografik taqsimot.

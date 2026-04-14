@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/pets');
 
-// Auth routes (guests only)
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
@@ -19,16 +18,16 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-// Dashboard (auth required, all roles)
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
-// Public routes
+
 Route::get('/pets', [PetController::class, 'index'])->name('pets.index');
-// ВАЖНО: /pets/create должен быть ДО /pets/{pet}, иначе Laravel перехватит "create" как ID питомца
+
 Route::get('/pets/create', [PetController::class, 'create'])->middleware('auth')->name('pets.create');
 Route::get('/pets/{pet}', [PetController::class, 'show'])->name('pets.show');
 
-// Authenticated users — CRUD объявлений (права проверяются в контроллере)
+
 Route::middleware('auth')->group(function () {
     Route::post('/pets', [PetController::class, 'store'])->name('pets.store');
     Route::get('/pets/{pet}/edit', [PetController::class, 'edit'])->name('pets.edit');
@@ -37,7 +36,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/pets/{pet}/buy', [OrderController::class, 'store'])->name('orders.store');
 });
 
-// Admin routes
 Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/analytics', [AdminController::class, 'analytics'])->name('analytics');

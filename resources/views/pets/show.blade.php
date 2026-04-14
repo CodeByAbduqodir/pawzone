@@ -94,7 +94,7 @@
                         </a>
                         @if($pet->telegram)
                             <a href="https://t.me/{{ ltrim($pet->telegram, '@') }}" class="btn btn-outline-secondary w-100" target="_blank" rel="noopener noreferrer">
-                                Telegram: @{{ ltrim($pet->telegram, '@') }}
+                                Telegram: &#64;{{ ltrim($pet->telegram, '@') }}
                             </a>
                         @endif
                     </div>

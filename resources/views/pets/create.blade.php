@@ -58,7 +58,7 @@
                         <label class="form-label fw-semibold">Telegram username</label>
                         <div class="input-group">
                             <span class="input-group-text">@</span>
-                            <input type="text" name="telegram" class="form-control @error('telegram') is-invalid @enderror" value="{{ old('telegram') }}" placeholder="username">
+                            <input type="text" name="telegram" class="form-control @error('telegram') is-invalid @enderror" value="{{ old('telegram', auth()->user()->telegram ? ltrim(auth()->user()->telegram, '@') : '') }}" placeholder="username">
                         </div>
                         <div class="form-text">Username ni @ belgisiz yozing.</div>
                         @error('telegram')

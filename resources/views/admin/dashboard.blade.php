@@ -14,7 +14,7 @@
                 </p>
             </div>
             <div class="page-actions">
-                <a href="{{ route('admin.analytics') }}" class="btn btn-outline-primary px-4">Analitika</a>
+                {{-- <a href="{{ route('admin.analytics') }}" class="btn btn-outline-primary px-4">Analitika</a> --}}
                 <a href="{{ route('admin.audit-log') }}" class="btn btn-gradient px-4">Audit log</a>
             </div>
         </div>
@@ -165,7 +165,7 @@
 
         @if($pets->hasPages())
             <div class="d-flex justify-content-center mt-4">
-                {{ $pets->onEachSide(1)->links() }}
+                {{ $pets->links() }}
             </div>
         @endif
     </div>

@@ -28,6 +28,21 @@
                     <x-form-input name="email" label="Email" type="email" value="{{ old('email') }}" />
 
                     <div class="mb-3">
+                        <label class="form-label fw-semibold">Telegram username</label>
+                        <div class="input-group">
+                            <span class="input-group-text">@</span>
+                            <input type="text" name="telegram"
+                                class="form-control @error('telegram') is-invalid @enderror"
+                                value="{{ old('telegram') }}"
+                                placeholder="username">
+                        </div>
+                        <div class="form-text">Ixtiyoriy. Username ni @ belgisiz yozing.</div>
+                        @error('telegram')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label fw-semibold">Rol</label>
                         <select name="role" class="form-select @error('role') is-invalid @enderror" required>
                             <option value="">— Rolni tanlang —</option>

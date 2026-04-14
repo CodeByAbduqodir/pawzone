@@ -121,7 +121,7 @@
 
         @if($logs->hasPages())
             <div class="d-flex justify-content-center mt-4">
-                {{ $logs->onEachSide(1)->links() }}
+                {{ $logs->links() }}
             </div>
         @endif
     </div>

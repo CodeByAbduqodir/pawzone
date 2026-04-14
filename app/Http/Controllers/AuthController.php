@@ -19,6 +19,7 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
+            'telegram' => 'nullable|string|max:32|regex:/^[a-zA-Z0-9_]*$/',
             'password' => 'required|string|min:8|confirmed',
             'role'     => 'required|in:owner,finder',
         ]);
@@ -26,6 +27,7 @@ class AuthController extends Controller
         $user = User::create([
             'name'     => $validated['name'],
             'email'    => $validated['email'],
+            'telegram' => $validated['telegram'] ? ltrim($validated['telegram'], '@') : null,
             'password' => Hash::make($validated['password']),
             'role'     => $validated['role'],
         ]);
